@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SECRON.Views
@@ -23,7 +25,8 @@ namespace SECRON.Views
         // Filtros de búsqueda
         private string _ultimoTextoBusqueda = "";
         private string _ultimoFiltro1 = "TODOS";
-        private string _ultimoFiltro2 = "TODOS";
+        private string _ultimoFiltro2 = "TODAS LAS CLASIFICACIONES";
+        private string _ultimoFiltro3 = "TODOS";
 
         // Selección actual en la grilla
         private List<Mdl_ItemStockByLocation> _stockList;
@@ -49,11 +52,11 @@ namespace SECRON.Views
             this.Resize += (s, e) =>
             {
                 if (toolStripPaginacion != null)
-                    toolStripPaginacion.Location = new Point(this.Width - 400, 225);
+                    toolStripPaginacion.Location = new Point(this.Width - 225, 225);
             };
         }
 
-        private void Frm_KARDEX_LocationsInventary_Load(object sender, EventArgs e)
+        private async void Frm_KARDEX_LocationsInventary_Load(object sender, EventArgs e)
         {
             try
             {
@@ -68,6 +71,13 @@ namespace SECRON.Views
 
                 // La carga la dispara el combo de sedes
                 CargarComboSedes();
+
+                // CARGAR PERMISOS DEL USUARIO
+                if (UserData != null)
+                {
+                    await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
+                    ConfigurarControlesPorPermisos();
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -88,6 +98,7 @@ namespace SECRON.Views
             Txt_Codigo.MaxLength = 50;
             Txt_Articulo.MaxLength = 200;
             Txt_Descripcion.MaxLength = 500;
+            Txt_CurrentStock.MaxLength = 18;
             Txt_MinimumStock.MaxLength = 18;
             Txt_MaximumStock.MaxLength = 18;
             Txt_ReorderPoint.MaxLength = 18;
@@ -122,8 +133,10 @@ namespace SECRON.Views
             Filtro3.Enabled = false;
             Btn_Search.Enabled = false;
             Btn_CleanSearch.Enabled = false;
+            Txt_CurrentStock.Enabled = false;
             Txt_MinimumStock.Enabled = false;
             Txt_MaximumStock.Enabled = false;
+            Txt_AddStock.Enabled    = false;
             Txt_ReorderPoint.Enabled = false;
             Txt_UnitCost.Enabled = false;
             Txt_LastPurchasePrice.Enabled = false;
@@ -141,11 +154,13 @@ namespace SECRON.Views
             Filtro3.Enabled = true;
             Btn_Search.Enabled = true;
             Btn_CleanSearch.Enabled = true;
-            Txt_MinimumStock.Enabled = true;
-            Txt_MaximumStock.Enabled = true;
-            Txt_ReorderPoint.Enabled = true;
-            Txt_UnitCost.Enabled = true;
-            Txt_LastPurchasePrice.Enabled = true;
+            //Txt_CurrentStock.Enabled = true;
+            Txt_AddStock.Enabled = true;
+            //Txt_MinimumStock.Enabled = true;
+            //Txt_MaximumStock.Enabled = true;
+            //Txt_ReorderPoint.Enabled = true;
+            //Txt_UnitCost.Enabled = true;
+            //Txt_LastPurchasePrice.Enabled = true;
             Btn_Clear.Enabled = true;
             Btn_Export.Enabled = true;
             Btn_Update.Enabled = false;
@@ -158,8 +173,9 @@ namespace SECRON.Views
             ConfigurarPlaceHolder(Txt_Codigo, "CÓDIGO DEL ARTÍCULO");
             ConfigurarPlaceHolder(Txt_Articulo, "NOMBRE DEL ARTÍCULO");
             ConfigurarPlaceHolder(Txt_Descripcion, "DESCRIPCIÓN DEL ARTÍCULO");
-            ConfigurarPlaceHolder(Txt_MinimumStock, "0.00");
+            ConfigurarPlaceHolder(Txt_MinimumStock, "0.00");        
             ConfigurarPlaceHolder(Txt_MaximumStock, "0.00");
+            ConfigurarPlaceHolder(Txt_CurrentStock, "0.00");
             ConfigurarPlaceHolder(Txt_ReorderPoint, "0.00");
             ConfigurarPlaceHolder(Txt_UnitCost, "0.00");
             ConfigurarPlaceHolder(Txt_LastPurchasePrice, "0.00");
@@ -305,19 +321,29 @@ namespace SECRON.Views
         {
             if (_stockList == null) return;
 
-            // Filtro texto
+            // Filtro1: campo de búsqueda
             if (!string.IsNullOrWhiteSpace(_ultimoTextoBusqueda))
             {
                 string texto = _ultimoTextoBusqueda.ToUpper();
-                _stockList = _stockList.Where(s =>
-                    (s.ItemCode?.ToUpper().Contains(texto) ?? false) ||
-                    (s.ItemName?.ToUpper().Contains(texto) ?? false)).ToList();
+
+                if (_ultimoFiltro1 == "POR CÓDIGO")
+                    _stockList = _stockList.Where(s => s.ItemCode?.ToUpper().Contains(texto) ?? false).ToList();
+                else if (_ultimoFiltro1 == "POR NOMBRE")
+                    _stockList = _stockList.Where(s => s.ItemName?.ToUpper().Contains(texto) ?? false).ToList();
+                else
+                    _stockList = _stockList.Where(s =>
+                        (s.ItemCode?.ToUpper().Contains(texto) ?? false) ||
+                        (s.ItemName?.ToUpper().Contains(texto) ?? false)).ToList();
             }
 
+            // Filtro2: clasificación
+            if (_ultimoFiltro2 != "TODAS LAS CLASIFICACIONES")
+                _stockList = _stockList.Where(s => s.CategoryName == _ultimoFiltro2).ToList();
+
             // Filtro3: estado de stock
-            if (_ultimoFiltro2 == "STOCK BAJO MÍNIMO")
+            if (_ultimoFiltro3 == "STOCK BAJO MÍNIMO")
                 _stockList = _stockList.Where(s => s.MinimumStock > 0 && s.CurrentStock <= s.MinimumStock).ToList();
-            else if (_ultimoFiltro2 == "STOCK SOBRE MÁXIMO")
+            else if (_ultimoFiltro3 == "STOCK SOBRE MÁXIMO")
                 _stockList = _stockList.Where(s => s.MaximumStock > 0 && s.CurrentStock > s.MaximumStock).ToList();
 
             totalRegistros = _stockList.Count;
@@ -345,8 +371,8 @@ namespace SECRON.Views
                 s.ItemCode,
                 s.ItemName,
                 s.CurrentStock,
-                s.ReservedStock,
-                s.AvailableStock,
+                //s.ReservedStock,
+                //s.AvailableStock,
                 s.MinimumStock,
                 s.MaximumStock,
                 s.LastMovementDate
@@ -372,10 +398,10 @@ namespace SECRON.Views
                     Tabla.Columns["ItemName"].HeaderText = "NOMBRE DEL ARTÍCULO";
                 if (Tabla.Columns.Contains("CurrentStock"))
                     Tabla.Columns["CurrentStock"].HeaderText = "STOCK ACTUAL";
-                if (Tabla.Columns.Contains("ReservedStock"))
-                    Tabla.Columns["ReservedStock"].HeaderText = "RESERVADO";
-                if (Tabla.Columns.Contains("AvailableStock"))
-                    Tabla.Columns["AvailableStock"].HeaderText = "DISPONIBLE";
+                //if (Tabla.Columns.Contains("ReservedStock"))
+                    //Tabla.Columns["ReservedStock"].HeaderText = "RESERVADO";
+                //if (Tabla.Columns.Contains("AvailableStock"))
+                    //Tabla.Columns["AvailableStock"].HeaderText = "DISPONIBLE";
                 if (Tabla.Columns.Contains("MinimumStock"))
                     Tabla.Columns["MinimumStock"].HeaderText = "STOCK MÍNIMO";
                 if (Tabla.Columns.Contains("MaximumStock"))
@@ -410,8 +436,8 @@ namespace SECRON.Views
             SetFill("ItemCode", 10);
             SetFill("ItemName", 32);
             SetFill("CurrentStock", 10);
-            SetFill("ReservedStock", 9);
-            SetFill("AvailableStock", 9);
+            //SetFill("ReservedStock", 9);
+            //SetFill("AvailableStock", 9);
             SetFill("MinimumStock", 9);
             SetFill("MaximumStock", 9);
             SetFill("LastMovementDate", 12);
@@ -461,8 +487,12 @@ namespace SECRON.Views
                 _stockSeleccionado.MinimumStock.ToString("0.00"), "0.00");
             SetTextBoxFromValue(Txt_MaximumStock,
                 _stockSeleccionado.MaximumStock.ToString("0.00"), "0.00");
+            SetTextBoxFromValue(Txt_CurrentStock,
+                _stockSeleccionado.CurrentStock.ToString("0.00"), "0.00");
+            
+            Txt_AddStock.Value= decimal.TryParse(Txt_CurrentStock.Text.Trim(), out decimal cStock) ? cStock : 0;
+            Txt_AddStock.Maximum = decimal.TryParse(Txt_MaximumStock.Text.Trim(), out decimal max) ? max : 0;
 
-            // Cargar detalles adicionales del artículo desde Items
             var items = Ctrl_Items.MostrarArticulos(1, 9999);
             var item = items.FirstOrDefault(i => i.ItemId == _stockSeleccionado.ItemId);
 
@@ -529,7 +559,7 @@ namespace SECRON.Views
             toolStripPaginacion.BackColor = Color.FromArgb(248, 249, 250);
             toolStripPaginacion.Height = 40;
             toolStripPaginacion.AutoSize = true;
-            toolStripPaginacion.Location = new Point(this.Width - 400, 225);
+            toolStripPaginacion.Location = new Point(this.Width - 225, 225);
 
             btnAnterior = new ToolStripButton
             {
@@ -640,8 +670,10 @@ namespace SECRON.Views
                 _ultimoTextoBusqueda = (Txt_ValorBuscado.ForeColor != Color.Gray)
                     ? Txt_ValorBuscado.Text.Trim() : "";
 
+
                 _ultimoFiltro1 = Filtro1.SelectedItem?.ToString() ?? "TODOS";
-                _ultimoFiltro2 = Filtro3.SelectedItem?.ToString() ?? "TODOS";
+                _ultimoFiltro2 = Filtro2.SelectedItem?.ToString() ?? "TODAS LAS CLASIFICACIONES";
+                _ultimoFiltro3 = Filtro3.SelectedItem?.ToString() ?? "TODOS";
 
                 paginaActual = 1;
                 RefrescarListado();
@@ -678,7 +710,9 @@ namespace SECRON.Views
 
             _ultimoTextoBusqueda = "";
             _ultimoFiltro1 = "TODOS";
-            _ultimoFiltro2 = "TODOS";
+            _ultimoFiltro2 = "TODAS LAS CLASIFICACIONES";
+            _ultimoFiltro3 = "TODOS";
+
             paginaActual = 1;
 
             RefrescarListado();
@@ -692,17 +726,20 @@ namespace SECRON.Views
 
         private void ConfigurarTabIndexYFocus()
         {
-            Txt_ValorBuscado.TabIndex = 0;
-            Filtro1.TabIndex = 1;
-            Filtro2.TabIndex = 2;
-            Filtro3.TabIndex = 3;
-            Txt_MinimumStock.TabIndex = 4;
-            Txt_MaximumStock.TabIndex = 5;
-            Txt_ReorderPoint.TabIndex = 6;
-            Txt_UnitCost.TabIndex = 7;
-            Txt_LastPurchasePrice.TabIndex = 8;
-            Btn_Update.TabIndex = 9;
-            Btn_Delete.TabIndex = 10;
+            int contador = 0;
+            Txt_ValorBuscado.TabIndex = contador; contador++;
+            Filtro1.TabIndex = contador; contador++;
+            Filtro2.TabIndex = contador; contador++;
+            Filtro3.TabIndex = contador; contador++;
+            Txt_CurrentStock.TabIndex = contador; contador++;
+            Txt_AddStock.TabIndex = contador; contador++;
+            Txt_MinimumStock.TabIndex = contador; contador++;
+            Txt_MaximumStock.TabIndex = contador; contador++;
+            Txt_ReorderPoint.TabIndex = contador; contador++;
+            Txt_UnitCost.TabIndex = contador; contador++;
+            Txt_LastPurchasePrice.TabIndex = contador; contador++;
+            Btn_Update.TabIndex = contador; contador++;
+            Btn_Delete.TabIndex = contador; contador++;
 
             Txt_ValorBuscado.Focus();
         }
@@ -755,6 +792,12 @@ namespace SECRON.Views
                     Txt_MinimumStock, "0.00", "STOCK MÍNIMO");
                 _stockSeleccionado.MaximumStock = ObtenerDecimalDesdeTextBox(
                     Txt_MaximumStock, "0.00", "STOCK MÁXIMO");
+
+                //decimal nuevoStock = decimal.TryParse(Txt_CurrentStock.Text.Trim(), out decimal stockActual) ? stockActual : 0;
+                //nuevoStock += (decimal)Txt_AddStock.Value;
+
+                _stockSeleccionado.CurrentStock = (decimal)Txt_AddStock.Value;
+
 
                 int resultado = Ctrl_ItemStockByLocation.ActualizarStockCompleto(_stockSeleccionado);
 
@@ -850,6 +893,7 @@ namespace SECRON.Views
             SetTextBoxFromValue(Txt_Descripcion, "", "DESCRIPCIÓN DEL ARTÍCULO");
             SetTextBoxFromValue(Txt_MinimumStock, "", "0.00");
             SetTextBoxFromValue(Txt_MaximumStock, "", "0.00");
+            SetTextBoxFromValue(Txt_CurrentStock, "", "0.00");
             SetTextBoxFromValue(Txt_ReorderPoint, "", "0.00");
             SetTextBoxFromValue(Txt_UnitCost, "", "0.00");
             SetTextBoxFromValue(Txt_LastPurchasePrice, "", "0.00");
@@ -1002,5 +1046,65 @@ namespace SECRON.Views
         }
 
         #endregion ExportarExcel
+        #region SistemaDePermisos
+        // ========== SISTEMA DE PERMISOS ==========
+        private Ctrl_Security_Auth authController;
+        private HashSet<string> permisosUsuario = new HashSet<string>();
+        protected virtual async Task CargarPermisosUsuario(int userId, int roleId)
+        {
+            try
+            {
+                authController = new Ctrl_Security_Auth();
+                var permisos = await authController.ObtenerPermisosUsuarioAsync(userId, roleId);
+
+                permisosUsuario = permisos != null
+                    ? new HashSet<string>(permisos, StringComparer.OrdinalIgnoreCase)
+                    : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                permisosUsuario = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                MessageBox.Show(
+                    $"ERROR AL CARGAR PERMISOS: {ex.Message}",
+                    "ERROR SECRON",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        protected bool TienePermiso(string permissionCode)
+        {
+            return !string.IsNullOrWhiteSpace(permissionCode) &&
+                   permisosUsuario != null &&
+                   permisosUsuario.Contains(permissionCode);
+        }
+
+        protected void AplicarEstadoBotonPorPermiso(Button boton, string permissionCode)
+        {
+            if (boton == null)
+                return;
+
+            bool habilitado = TienePermiso(permissionCode);
+
+            boton.Enabled = habilitado;
+
+            if (!habilitado)
+            {
+                boton.BackColor = Color.FromArgb(200, 200, 200);
+                boton.ForeColor = Color.Gray;
+                boton.Cursor = Cursors.No;
+            }
+        }
+
+        protected void ConfigurarControlesPorPermisos()
+        {
+            AplicarEstadoBotonPorPermiso(Btn_Update, "KARDEX_INVENTORY_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Delete, "KARDEX_INVENTORY_INACTIVE");
+            AplicarEstadoBotonPorPermiso(Btn_Search, "KARDEX_INVENTORY_READ");
+            AplicarEstadoBotonPorPermiso(Btn_Export, "KARDEX_INVENTORY_EXPORT");
+        }
+        #endregion SistemaDePermisos
     }
 }

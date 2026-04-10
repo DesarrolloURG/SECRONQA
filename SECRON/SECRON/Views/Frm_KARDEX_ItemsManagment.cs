@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -54,7 +55,7 @@ namespace SECRON.Views
             };
         }
 
-        private void Frm_KARDEX_Managment_Load(object sender, EventArgs e)
+        private async void Frm_KARDEX_Managment_Load(object sender, EventArgs e)
         {
             try
             {
@@ -71,6 +72,13 @@ namespace SECRON.Views
                 CargarArticulos();
                 ActualizarInfoPaginacion();
                 CargarProximoCodigoItem();
+
+                // CARGAR PERMISOS DEL USUARIO
+                if (UserData != null)
+                {
+                    await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
+                    ConfigurarControlesPorPermisos();
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -266,7 +274,7 @@ namespace SECRON.Views
 
                 Tabla.Columns["MinimumStock"].HeaderText = "STOCK MÍNIMO";
                 Tabla.Columns["MaximumStock"].HeaderText = "STOCK MÁXIMO";
-                Tabla.Columns["ReorderPoint"].HeaderText = "PUNTO REORDEN";
+                Tabla.Columns["ReorderPoint"].HeaderText = "ALERTA DE PEDIDO";
                 Tabla.Columns["UnitCost"].HeaderText = "COSTO UNITARIO";
                 Tabla.Columns["LastPurchasePrice"].HeaderText = "ÚLTIMO PRECIO COMPRA";
                 Tabla.Columns["HasLotControl"].HeaderText = "CONTROL LOTES";
@@ -517,6 +525,7 @@ namespace SECRON.Views
 
         private void Btn_Search_Click(object sender, EventArgs e)
         {
+            if (!Btn_Search.Enabled) return;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -543,24 +552,20 @@ namespace SECRON.Views
 
                 paginaActual = 1;
 
-                // Traer desde BD
                 _itemsList = Ctrl_Items.BuscarArticulos(
                     textoBusqueda: valorBusqueda,
                     categoryId: categoriaId,
+                    filtro1: filtro1,
+                    filtro3: filtro3,
                     pageNumber: paginaActual,
                     pageSize: registrosPorPagina
-                );
+                    );
 
-                // filtros Filtro2 / Filtro3...
+                // Filtro2 sigue en memoria (no está en BD)
                 if (filtro2 == "CON CONTROL DE LOTE")
                     _itemsList = _itemsList.Where(i => i.HasLotControl).ToList();
                 else if (filtro2 == "SIN CONTROL DE LOTE")
                     _itemsList = _itemsList.Where(i => !i.HasLotControl).ToList();
-
-                if (filtro3 == "SOLO ACTIVOS")
-                    _itemsList = _itemsList.Where(i => i.IsActive).ToList();
-                else if (filtro3 == "SOLO INACTIVOS")
-                    _itemsList = _itemsList.Where(i => !i.IsActive).ToList();
 
                 AsignarDataSourceArticulos();
                 ConfigurarTabla();
@@ -591,6 +596,7 @@ namespace SECRON.Views
 
         private void Btn_CleanSearch_Click(object sender, EventArgs e)
         {
+            if (!Btn_CleanSearch.Enabled) return;
             Txt_ValorBuscado.Text = "BUSCAR POR CÓDIGO, NOMBRE O DESCRIPCIÓN...";
             Txt_ValorBuscado.ForeColor = Color.Gray;
 
@@ -609,6 +615,7 @@ namespace SECRON.Views
             ConfigurarTabla();
             AjustarColumnas();
             ActualizarInfoPaginacion();
+            ConfigurarControlesPorPermisos();
         }
 
         #endregion Search
@@ -883,6 +890,7 @@ namespace SECRON.Views
 
         private void Btn_Save_Click(object sender, EventArgs e)
         {
+            if (!Btn_Save.Enabled) return;
             try
             {
                 if (!ValidarCamposObligatorios())
@@ -950,6 +958,9 @@ namespace SECRON.Views
 
         private void Btn_Update_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("El boton esta: "+ Btn_Update.Enabled);
+            if (!Btn_Update.Enabled) return;
+
             try
             {
                 if (_itemSeleccionado == null || _itemSeleccionado.ItemId == 0)
@@ -1020,6 +1031,7 @@ namespace SECRON.Views
 
         private void Btn_Inactive_Click(object sender, EventArgs e)
         {
+            if (!Btn_Inactive.Enabled) return;
             try
             {
                 if (_itemSeleccionado == null || _itemSeleccionado.ItemId == 0)
@@ -1093,7 +1105,9 @@ namespace SECRON.Views
 
         private void Btn_Clear_Click(object sender, EventArgs e)
         {
+            if (!Btn_Clear.Enabled) return;
             LimpiarFormulario();
+            ConfigurarControlesPorPermisos();
         }
 
         #endregion Limpieza
@@ -1101,6 +1115,7 @@ namespace SECRON.Views
 
         private void Btn_SearchCategory_Click(object sender, EventArgs e)
         {
+            if (!Btn_SearchCategory.Enabled) return;
             try
             {
                 using (var frm = new Frm_KARDEX_SearchCategory())
@@ -1122,6 +1137,7 @@ namespace SECRON.Views
 
         private void Btn_SearchMeasurementUnits_Click(object sender, EventArgs e)
         {
+            if (!Btn_SearchMeasurementUnits.Enabled) return;
             try
             {
                 using (var frm = new Frm_KARDEX_SearchMeasurementUnits())
@@ -1145,6 +1161,7 @@ namespace SECRON.Views
         #region ExportarExcel
         private void Btn_Export_Click(object sender, EventArgs e)
         {
+            if (!Btn_Export.Enabled) return;
             try
             {
                 // Si en el futuro agregas permisos para KARDEX, aquí iría:
@@ -1173,6 +1190,8 @@ namespace SECRON.Views
                     todosLosArticulos = Ctrl_Items.BuscarArticulos(
                         _ultimoTextoBusqueda,
                         _ultimaCategoriaFiltroId,
+                        "TODOS",
+                        "TODOS",
                         1,
                         int.MaxValue
                     );
@@ -1393,5 +1412,74 @@ namespace SECRON.Views
             }
         }
         #endregion ExportarExcel
+        #region SistemaDePermisos
+        // ========== SISTEMA DE PERMISOS ==========
+        private Ctrl_Security_Auth authController;
+        private HashSet<string> permisosUsuario = new HashSet<string>();
+        protected virtual async Task CargarPermisosUsuario(int userId, int roleId)
+        {
+            try
+            {
+                authController = new Ctrl_Security_Auth();
+                var permisos = await authController.ObtenerPermisosUsuarioAsync(userId, roleId);
+
+                permisosUsuario = permisos != null
+                    ? new HashSet<string>(permisos, StringComparer.OrdinalIgnoreCase)
+                    : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                permisosUsuario = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                MessageBox.Show(
+                    $"ERROR AL CARGAR PERMISOS: {ex.Message}",
+                    "ERROR SECRON",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        protected bool TienePermiso(string permissionCode)
+        {
+            return !string.IsNullOrWhiteSpace(permissionCode) &&
+                   permisosUsuario != null &&
+                   permisosUsuario.Contains(permissionCode);
+        }
+
+        protected void AplicarEstadoBotonPorPermiso(Button boton, string permissionCode)
+        {
+            if (boton == null)
+                return;
+
+            bool habilitado = TienePermiso(permissionCode);
+
+            boton.Enabled = habilitado;
+
+            if (habilitado)
+            {
+                boton.UseVisualStyleBackColor = true;
+                boton.ForeColor = Color.Black;
+                boton.Cursor = Cursors.Default;
+            }
+            else
+            {
+                boton.BackColor = Color.FromArgb(200, 200, 200);
+                boton.ForeColor = Color.Gray;
+                boton.Cursor = Cursors.No;
+            }
+        }
+
+        protected void ConfigurarControlesPorPermisos()
+        {
+            AplicarEstadoBotonPorPermiso(Btn_Save, "KARDEX_CATALOG_CREATE");
+            AplicarEstadoBotonPorPermiso(Btn_Update, "KARDEX_CATALOG_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Inactive, "KARDEX_CATALOG_INACTIVE");
+            AplicarEstadoBotonPorPermiso(Btn_Export, "KARDEX_CATALOG_EXPORT");
+            AplicarEstadoBotonPorPermiso(Btn_Import, "KARDEX_CATALOG_IMPORT");
+            AplicarEstadoBotonPorPermiso(Btn_Search, "KARDEX_CATALOG_READ");
+
+        }
+        #endregion SistemaDePermisos
     }
 }

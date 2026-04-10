@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -44,16 +45,16 @@ namespace SECRON.Views
             this.Resize += (s, e) =>
             {
                 if (toolStripPaginacion != null)
-                    toolStripPaginacion.Location = new Point(this.Width - 400, 225);
+                    toolStripPaginacion.Location = new Point(this.Width - 225, 225);
             };
         }
 
-        private void Frm_KARDEX_CatalogLocationsCategories_Load(object sender, EventArgs e)
+        private async void Frm_KARDEX_CatalogLocationsCategories_Load(object sender, EventArgs e)
         {
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-
+                
                 ConfigurarTabIndexYFocus();
                 ConfigurarMaxLengthTextBox();
                 ConfigurarComponentesDeshabilitados();
@@ -61,6 +62,13 @@ namespace SECRON.Views
                 ConfigurarFiltros();
                 CrearToolStripPaginacion();        // Primero el toolstrip
                 ConfigurarComboCategoria();        // Luego el combo que dispara la carga
+
+                // CARGAR PERMISOS DEL USUARIO
+                if (UserData != null)
+                {
+                    await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
+                    ConfigurarControlesPorPermisos();
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -98,6 +106,15 @@ namespace SECRON.Views
             Txt_Descripcion.Enabled = false;
             Txt_Category.Enabled = false;
             Txt_MeasurementUnits.Enabled = false;
+
+            Txt_MinimumStock.Enabled = false;
+            Txt_MaximumStock.Enabled = false;
+            Txt_UnitCost.Enabled = false;
+            Txt_LastPurchasePrice.Enabled = false;
+            Txt_ReorderPoint.Enabled = false;
+            Txt_UnitCost.Enabled = false;
+            Txt_LastPurchasePrice.Enabled = false;
+            Txt_HasLotControl.Enabled = false;
             ComboBox_HasExpiryDate.Enabled = false;
 
             // Todo deshabilitado hasta que haya categoría seleccionada
@@ -120,6 +137,10 @@ namespace SECRON.Views
             Btn_Delete.Enabled = false;
             Btn_Clear.Enabled = false;
             Btn_Export.Enabled = false;
+            Txt_UnitCost.Enabled = false;
+            Txt_LastPurchasePrice.Enabled = false;
+            Txt_HasLotControl.Enabled = false;
+            ComboBox_HasExpiryDate.Enabled = false;
         }
 
         private void HabilitarTodo()
@@ -133,13 +154,12 @@ namespace SECRON.Views
             Txt_MinimumStock.Enabled = true;
             Txt_MaximumStock.Enabled = true;
             Txt_ReorderPoint.Enabled = true;
-            Txt_UnitCost.Enabled = true;
-            Txt_LastPurchasePrice.Enabled = true;
             Btn_Clear.Enabled = true;
             Btn_Export.Enabled = true;
             // Update y Delete solo se habilitan al seleccionar fila
             Btn_Update.Enabled = false;
             Btn_Delete.Enabled = false;
+            ConfigurarControlesPorPermisos();
         }
 
         private void ConfigurarPlaceHoldersTextbox()
@@ -292,6 +312,8 @@ namespace SECRON.Views
                     if (respuesta == DialogResult.Yes)
                         AbrirFormularioPlantillas();
                 }
+
+                ConfigurarControlesPorPermisos();
             }
             catch (Exception ex)
             {
@@ -305,6 +327,7 @@ namespace SECRON.Views
 
         private void Btn_Categories_Click(object sender, EventArgs e)
         {
+            if (!Btn_Categories.Enabled) return;
             try
             {
                 AbrirFormularioCategorias();
@@ -354,6 +377,7 @@ namespace SECRON.Views
 
         private void Btn_Template_Click(object sender, EventArgs e)
         {
+            if (!Btn_Template.Enabled) return;
             // Abrir gestión de plantillas de stock por categoría
             try
             {
@@ -390,10 +414,11 @@ namespace SECRON.Views
             }
 
             _plantillasList = Ctrl_ItemStockTemplates.BuscarPlantillas(
-                locationCategoryId: _categoriaActivaId.Value,
-                textoBusqueda: _ultimoTextoBusqueda,
-                pageNumber: paginaActual,
-                pageSize: registrosPorPagina);
+            locationCategoryId: _categoriaActivaId.Value,
+            textoBusqueda: _ultimoTextoBusqueda,
+            filtro1: _ultimoFiltro1,
+            pageNumber: paginaActual,
+            pageSize: registrosPorPagina);
 
             AsignarDataSource();
         }
@@ -436,7 +461,7 @@ namespace SECRON.Views
                 if (Tabla.Columns.Contains("MaximumStock"))
                     Tabla.Columns["MaximumStock"].HeaderText = "STOCK MÁXIMO";
                 if (Tabla.Columns.Contains("ReorderPoint"))
-                    Tabla.Columns["ReorderPoint"].HeaderText = "PUNTO REORDEN";
+                    Tabla.Columns["ReorderPoint"].HeaderText = "ALERTA DE PEDIDO";
             }
 
             Tabla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -498,6 +523,7 @@ namespace SECRON.Views
                 MessageBox.Show($"Error al seleccionar artículo: {ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            ConfigurarControlesPorPermisos();
         }
 
         private void CargarDatosEnFormulario()
@@ -540,7 +566,7 @@ namespace SECRON.Views
             toolStripPaginacion.BackColor = Color.FromArgb(248, 249, 250);
             toolStripPaginacion.Height = 40;
             toolStripPaginacion.AutoSize = true;
-            toolStripPaginacion.Location = new Point(this.Width - 400, 225);
+            toolStripPaginacion.Location = new Point(this.Width - 225, 225);
 
             btnAnterior = new ToolStripButton();
             btnAnterior.Text = "❮ Anterior";
@@ -658,6 +684,7 @@ namespace SECRON.Views
 
         private void Btn_Search_Click(object sender, EventArgs e)
         {
+            if (!Btn_Search.Enabled) return;
             try
             {
                 if (!_categoriaActivaId.HasValue) return;
@@ -697,6 +724,7 @@ namespace SECRON.Views
 
         private void Btn_CleanSearch_Click(object sender, EventArgs e)
         {
+            if (!Btn_CleanSearch.Enabled) return;
             Txt_ValorBuscado.Text = "BUSCAR POR CÓDIGO, NOMBRE O DESCRIPCIÓN...";
             Txt_ValorBuscado.ForeColor = Color.Gray;
             Filtro1.SelectedIndex = 0;
@@ -787,6 +815,7 @@ namespace SECRON.Views
 
         private void Btn_Update_Click(object sender, EventArgs e)
         {
+            if (!Btn_Update.Enabled) return;
             try
             {
                 if (_itemSeleccionado == null)
@@ -807,7 +836,7 @@ namespace SECRON.Views
                 _itemSeleccionado.MaximumStock = ObtenerDecimalDesdeTextBox(Txt_MaximumStock, "0.00", "STOCK MÁXIMO");
                 _itemSeleccionado.ReorderPoint = TienePlaceholder(Txt_ReorderPoint, "0.00")
                     ? (decimal?)null
-                    : ObtenerDecimalDesdeTextBox(Txt_ReorderPoint, "0.00", "PUNTO REORDEN");
+                    : ObtenerDecimalDesdeTextBox(Txt_ReorderPoint, "0.00", "ALERTA DE PEDIDO");
                 _itemSeleccionado.ModifiedBy = UserData?.UserId;
 
                 int resultado = Ctrl_ItemStockTemplates.ActualizarPlantilla(_itemSeleccionado);
@@ -838,6 +867,7 @@ namespace SECRON.Views
 
         private void Btn_Delete_Click(object sender, EventArgs e)
         {
+            if (!Btn_Delete.Enabled) return;
             try
             {
                 if (_itemSeleccionado == null)
@@ -883,6 +913,7 @@ namespace SECRON.Views
 
         private void Btn_Clear_Click(object sender, EventArgs e)
         {
+            if (!Btn_Clear.Enabled) return;
             LimpiarFormulario();
         }
 
@@ -911,6 +942,7 @@ namespace SECRON.Views
 
         private void Btn_Export_Click(object sender, EventArgs e)
         {
+            if (!Btn_Export.Enabled) return;
             try
             {
                 if (!_categoriaActivaId.HasValue)
@@ -1027,6 +1059,72 @@ namespace SECRON.Views
         }
 
         #endregion ExportarExcel
+        #region SistemaDePermisos
+        // ========== SISTEMA DE PERMISOS ==========
+        private Ctrl_Security_Auth authController;
+        private HashSet<string> permisosUsuario = new HashSet<string>();
+        protected virtual async Task CargarPermisosUsuario(int userId, int roleId)
+        {
+            try
+            {
+                authController = new Ctrl_Security_Auth();
+                var permisos = await authController.ObtenerPermisosUsuarioAsync(userId, roleId);
+
+                permisosUsuario = permisos != null
+                    ? new HashSet<string>(permisos, StringComparer.OrdinalIgnoreCase)
+                    : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                permisosUsuario = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                MessageBox.Show(
+                    $"ERROR AL CARGAR PERMISOS: {ex.Message}",
+                    "ERROR SECRON",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        protected bool TienePermiso(string permissionCode)
+        {
+            return !string.IsNullOrWhiteSpace(permissionCode) &&
+                   permisosUsuario != null &&
+                   permisosUsuario.Contains(permissionCode);
+        }
+
+        protected void AplicarEstadoBotonPorPermiso(Button boton, string permissionCode)
+        {
+            if (boton == null)
+                return;
+
+            bool habilitado = TienePermiso(permissionCode);
+
+            boton.Enabled = habilitado;
+
+            if (habilitado)
+            {
+                boton.UseVisualStyleBackColor = true;
+                boton.ForeColor = Color.Black;
+                boton.Cursor = Cursors.Default;
+            }
+            else
+            {
+                boton.BackColor = Color.FromArgb(200, 200, 200);
+                boton.ForeColor = Color.Gray;
+                boton.Cursor = Cursors.No;
+            }
+        }
+
+        protected void ConfigurarControlesPorPermisos()
+        {
+            AplicarEstadoBotonPorPermiso(Btn_Update, "KARDEX_CATLOCATION_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Delete, "KARDEX_CATLOCATION_INACTIVE");
+            AplicarEstadoBotonPorPermiso(Btn_Search, "KARDEX_CATLOCATION_READ");
+            AplicarEstadoBotonPorPermiso(Btn_Export, "KARDEX_CATLOCATION_EXPORT");
+        }
+        #endregion SistemaDePermisos
     }
     // CLASE AUXILIAR DE APOYO EN PROCEDIMIENTOS DE CATEGORÍAS
     // Permite almacenar el ID y nombre de la categoría para mostrar en el ComboBox

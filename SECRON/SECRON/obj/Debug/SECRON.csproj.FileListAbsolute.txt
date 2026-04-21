@@ -60,9 +60,6 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONDEV\SECRON\SECRON\obj\Debug\SECRON.c
 C:\Users\Jose_Torres\Documents\GitHub\SECRONDEV\SECRON\SECRON\obj\Debug\SECRON.exe
 C:\Users\Jose_Torres\Documents\GitHub\SECRONDEV\SECRON\SECRON\obj\Debug\SECRON.pdb
 C:\Users\Jose_Torres\Documents\GitHub\SECRONDEV\SECRON\SECRON\obj\Debug\SECRON.exe.config
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.exe.config
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.exe
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.pdb
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\BCrypt.Net-Next.dll
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\System.Buffers.dll
@@ -108,7 +105,6 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Suppliers_Managment.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Frm_System_Splash.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Frm_Security_Login.resources
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Properties.Resources.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Teachers_Managment.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Transfers_Managment.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Transfers_Reports.resources
@@ -119,10 +115,14 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.GenerateResource.cache
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.CoreCompileInputs.cache
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.Up2Date
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.exe
-C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.pdb
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.exe.config
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.exe.manifest
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.application
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.exe
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\SECRON.pdb
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Properties.Resources.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.TrustInfo.xml
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.exe.manifest
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.application
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.exe
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.pdb

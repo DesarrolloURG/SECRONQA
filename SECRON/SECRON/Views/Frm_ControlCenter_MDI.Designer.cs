@@ -50,12 +50,10 @@
             this.BtnOrdersManagment = new System.Windows.Forms.Button();
             this.BtnOrdersRequisicionManagment = new System.Windows.Forms.Button();
             this.BtnOrdersSolicitud = new System.Windows.Forms.Button();
-            this.PanelKardex = new System.Windows.Forms.Panel();
-            this.BtnKardexInventoryReport = new System.Windows.Forms.Button();
-            this.BtnKardexInsumosSedes = new System.Windows.Forms.Button();
-            this.BtnKardexValorizacion = new System.Windows.Forms.Button();
-            this.BtnKardexInventory = new System.Windows.Forms.Button();
-            this.BtnKardexCatalogo = new System.Windows.Forms.Button();
+            this.PanelInventory = new System.Windows.Forms.Panel();
+            this.BtnInvWarehouse = new System.Windows.Forms.Button();
+            this.BtnInvStaticItems = new System.Windows.Forms.Button();
+            this.BtnInvKardex = new System.Windows.Forms.Button();
             this.PanelBills = new System.Windows.Forms.Panel();
             this.BtnBillsCatalog = new System.Windows.Forms.Button();
             this.BtnBillsReports = new System.Windows.Forms.Button();
@@ -113,13 +111,12 @@
             this.PanelNavegacion = new System.Windows.Forms.Panel();
             this.Btn_Transfers = new System.Windows.Forms.Button();
             this.Btn_Teachers = new System.Windows.Forms.Button();
-            this.BtnStaticItems = new System.Windows.Forms.Button();
             this.BtnLocations = new System.Windows.Forms.Button();
             this.BtnAccountingBooks = new System.Windows.Forms.Button();
             this.BtnBanks = new System.Windows.Forms.Button();
             this.BtnChecks = new System.Windows.Forms.Button();
             this.BtnBills = new System.Windows.Forms.Button();
-            this.BtnKardex = new System.Windows.Forms.Button();
+            this.Btn_Inventory = new System.Windows.Forms.Button();
             this.BtnOrders = new System.Windows.Forms.Button();
             this.BtnCounts = new System.Windows.Forms.Button();
             this.BtnSuppliers = new System.Windows.Forms.Button();
@@ -161,15 +158,19 @@
             this.PanelTransfers = new System.Windows.Forms.Panel();
             this.BtnTransfersReports = new System.Windows.Forms.Button();
             this.BtnTransfersManagment = new System.Windows.Forms.Button();
-            this.PanelKARDEX_1 = new System.Windows.Forms.Panel();
-            this.BtnKARDEX_CatalogLocationsCategories = new System.Windows.Forms.Button();
-            this.BtnKARDEX_ItemsManagment = new System.Windows.Forms.Button();
+            this.PanelInventory_1 = new System.Windows.Forms.Panel();
+            this.BtnKardexInsumosSedes = new System.Windows.Forms.Button();
+            this.BtnKardexValorizacion = new System.Windows.Forms.Button();
+            this.BtnKardexInventory = new System.Windows.Forms.Button();
+            this.BtnKardexInventoryReport = new System.Windows.Forms.Button();
+            this.BtnKardex_CatalogLocationsCategories = new System.Windows.Forms.Button();
+            this.BtnKardex_ItemsManagment = new System.Windows.Forms.Button();
             this.PanelEmployees.SuspendLayout();
             this.PanelUsers.SuspendLayout();
             this.PanelSuppliers.SuspendLayout();
             this.PanelCounts.SuspendLayout();
             this.PanelOrders.SuspendLayout();
-            this.PanelKardex.SuspendLayout();
+            this.PanelInventory.SuspendLayout();
             this.PanelBills.SuspendLayout();
             this.PanelChecks.SuspendLayout();
             this.PanelBanks.SuspendLayout();
@@ -189,7 +190,7 @@
             this.PanelTeachers_4.SuspendLayout();
             this.PanelTeachers_5.SuspendLayout();
             this.PanelTransfers.SuspendLayout();
-            this.PanelKARDEX_1.SuspendLayout();
+            this.PanelInventory_1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PanelEmployees
@@ -573,119 +574,77 @@
             this.BtnOrdersSolicitud.UseVisualStyleBackColor = false;
             this.BtnOrdersSolicitud.Click += new System.EventHandler(this.BtnOrdersSolicitud_Click);
             // 
-            // PanelKardex
+            // PanelInventory
             // 
-            this.PanelKardex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.PanelKardex.Controls.Add(this.BtnKardexInventoryReport);
-            this.PanelKardex.Controls.Add(this.BtnKardexInsumosSedes);
-            this.PanelKardex.Controls.Add(this.BtnKardexValorizacion);
-            this.PanelKardex.Controls.Add(this.BtnKardexInventory);
-            this.PanelKardex.Controls.Add(this.BtnKardexCatalogo);
-            this.PanelKardex.Location = new System.Drawing.Point(200, 5);
-            this.PanelKardex.Name = "PanelKardex";
-            this.PanelKardex.Size = new System.Drawing.Size(300, 200);
-            this.PanelKardex.TabIndex = 8;
-            this.PanelKardex.Visible = false;
+            this.PanelInventory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.PanelInventory.Controls.Add(this.BtnInvWarehouse);
+            this.PanelInventory.Controls.Add(this.BtnInvStaticItems);
+            this.PanelInventory.Controls.Add(this.BtnInvKardex);
+            this.PanelInventory.Location = new System.Drawing.Point(200, 1);
+            this.PanelInventory.Name = "PanelInventory";
+            this.PanelInventory.Size = new System.Drawing.Size(300, 120);
+            this.PanelInventory.TabIndex = 8;
+            this.PanelInventory.Visible = false;
             // 
-            // BtnKardexInventoryReport
+            // BtnInvWarehouse
             // 
-            this.BtnKardexInventoryReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKardexInventoryReport.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardexInventoryReport.FlatAppearance.BorderSize = 0;
-            this.BtnKardexInventoryReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardexInventoryReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardexInventoryReport.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardexInventoryReport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardexInventoryReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInventoryReport.Location = new System.Drawing.Point(0, 140);
-            this.BtnKardexInventoryReport.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardexInventoryReport.Name = "BtnKardexInventoryReport";
-            this.BtnKardexInventoryReport.Size = new System.Drawing.Size(300, 35);
-            this.BtnKardexInventoryReport.TabIndex = 48;
-            this.BtnKardexInventoryReport.Text = "REPORTES DE INVENTARIO";
-            this.BtnKardexInventoryReport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInventoryReport.UseVisualStyleBackColor = false;
-            this.BtnKardexInventoryReport.Click += new System.EventHandler(this.BtnKardexInventoryReport_Click);
+            this.BtnInvWarehouse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnInvWarehouse.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnInvWarehouse.FlatAppearance.BorderSize = 0;
+            this.BtnInvWarehouse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnInvWarehouse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnInvWarehouse.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnInvWarehouse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnInvWarehouse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvWarehouse.Location = new System.Drawing.Point(0, 70);
+            this.BtnInvWarehouse.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnInvWarehouse.Name = "BtnInvWarehouse";
+            this.BtnInvWarehouse.Size = new System.Drawing.Size(300, 35);
+            this.BtnInvWarehouse.TabIndex = 51;
+            this.BtnInvWarehouse.Text = "ALMACÉN";
+            this.BtnInvWarehouse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvWarehouse.UseVisualStyleBackColor = false;
+            this.BtnInvWarehouse.Click += new System.EventHandler(this.BtnInvWarehouse_Click);
             // 
-            // BtnKardexInsumosSedes
+            // BtnInvStaticItems
             // 
-            this.BtnKardexInsumosSedes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKardexInsumosSedes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardexInsumosSedes.FlatAppearance.BorderSize = 0;
-            this.BtnKardexInsumosSedes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardexInsumosSedes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardexInsumosSedes.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardexInsumosSedes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardexInsumosSedes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInsumosSedes.Location = new System.Drawing.Point(0, 105);
-            this.BtnKardexInsumosSedes.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardexInsumosSedes.Name = "BtnKardexInsumosSedes";
-            this.BtnKardexInsumosSedes.Size = new System.Drawing.Size(300, 35);
-            this.BtnKardexInsumosSedes.TabIndex = 47;
-            this.BtnKardexInsumosSedes.Text = "CONTROL DE INSUMOS EN SEDES";
-            this.BtnKardexInsumosSedes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInsumosSedes.UseVisualStyleBackColor = false;
-            this.BtnKardexInsumosSedes.Click += new System.EventHandler(this.BtnKardexInsumosSedes_Click);
+            this.BtnInvStaticItems.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnInvStaticItems.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnInvStaticItems.FlatAppearance.BorderSize = 0;
+            this.BtnInvStaticItems.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnInvStaticItems.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnInvStaticItems.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnInvStaticItems.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnInvStaticItems.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvStaticItems.Location = new System.Drawing.Point(0, 35);
+            this.BtnInvStaticItems.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnInvStaticItems.Name = "BtnInvStaticItems";
+            this.BtnInvStaticItems.Size = new System.Drawing.Size(300, 35);
+            this.BtnInvStaticItems.TabIndex = 50;
+            this.BtnInvStaticItems.Text = "ACTIVOS FIJOS";
+            this.BtnInvStaticItems.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvStaticItems.UseVisualStyleBackColor = false;
+            this.BtnInvStaticItems.Click += new System.EventHandler(this.BtnInvStaticItems_Click);
             // 
-            // BtnKardexValorizacion
+            // BtnInvKardex
             // 
-            this.BtnKardexValorizacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKardexValorizacion.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardexValorizacion.FlatAppearance.BorderSize = 0;
-            this.BtnKardexValorizacion.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardexValorizacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardexValorizacion.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardexValorizacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardexValorizacion.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexValorizacion.Location = new System.Drawing.Point(0, 70);
-            this.BtnKardexValorizacion.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardexValorizacion.Name = "BtnKardexValorizacion";
-            this.BtnKardexValorizacion.Size = new System.Drawing.Size(300, 35);
-            this.BtnKardexValorizacion.TabIndex = 46;
-            this.BtnKardexValorizacion.Text = "VALORIZACIÓN Y COSTOS";
-            this.BtnKardexValorizacion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexValorizacion.UseVisualStyleBackColor = false;
-            this.BtnKardexValorizacion.Click += new System.EventHandler(this.BtnKardexValorizacion_Click);
-            // 
-            // BtnKardexInventory
-            // 
-            this.BtnKardexInventory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKardexInventory.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardexInventory.FlatAppearance.BorderSize = 0;
-            this.BtnKardexInventory.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardexInventory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardexInventory.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardexInventory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardexInventory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInventory.Location = new System.Drawing.Point(0, 35);
-            this.BtnKardexInventory.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardexInventory.Name = "BtnKardexInventory";
-            this.BtnKardexInventory.Size = new System.Drawing.Size(300, 35);
-            this.BtnKardexInventory.TabIndex = 45;
-            this.BtnKardexInventory.Text = "CONTROL DE INVENTARIOS";
-            this.BtnKardexInventory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexInventory.UseVisualStyleBackColor = false;
-            this.BtnKardexInventory.Click += new System.EventHandler(this.BtnKardexInventory_Click);
-            // 
-            // BtnKardexCatalogo
-            // 
-            this.BtnKardexCatalogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKardexCatalogo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardexCatalogo.FlatAppearance.BorderSize = 0;
-            this.BtnKardexCatalogo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardexCatalogo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardexCatalogo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardexCatalogo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardexCatalogo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexCatalogo.Location = new System.Drawing.Point(0, 0);
-            this.BtnKardexCatalogo.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardexCatalogo.Name = "BtnKardexCatalogo";
-            this.BtnKardexCatalogo.Size = new System.Drawing.Size(300, 35);
-            this.BtnKardexCatalogo.TabIndex = 44;
-            this.BtnKardexCatalogo.Text = "GESTIÓN DE ARTÍCULOS";
-            this.BtnKardexCatalogo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardexCatalogo.UseVisualStyleBackColor = false;
-            this.BtnKardexCatalogo.Click += new System.EventHandler(this.BtnKardexCatalogo_Click);
+            this.BtnInvKardex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnInvKardex.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnInvKardex.FlatAppearance.BorderSize = 0;
+            this.BtnInvKardex.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnInvKardex.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnInvKardex.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnInvKardex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnInvKardex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvKardex.Location = new System.Drawing.Point(0, 0);
+            this.BtnInvKardex.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnInvKardex.Name = "BtnInvKardex";
+            this.BtnInvKardex.Size = new System.Drawing.Size(300, 35);
+            this.BtnInvKardex.TabIndex = 49;
+            this.BtnInvKardex.Text = "KARDEX";
+            this.BtnInvKardex.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnInvKardex.UseVisualStyleBackColor = false;
+            this.BtnInvKardex.Click += new System.EventHandler(this.BtnInvKardex_Click);
             // 
             // PanelBills
             // 
@@ -1330,7 +1289,7 @@
             this.PanelStaticItems.Controls.Add(this.BtnStaticItemsMovementsController);
             this.PanelStaticItems.Controls.Add(this.BtnStaticItemsResponsabilityLetter);
             this.PanelStaticItems.Controls.Add(this.BtnStaticItemsManagment);
-            this.PanelStaticItems.Location = new System.Drawing.Point(200, 8);
+            this.PanelStaticItems.Location = new System.Drawing.Point(500, 1);
             this.PanelStaticItems.Name = "PanelStaticItems";
             this.PanelStaticItems.Size = new System.Drawing.Size(300, 280);
             this.PanelStaticItems.TabIndex = 14;
@@ -1636,13 +1595,12 @@
             // 
             this.PanelNavegacion.Controls.Add(this.Btn_Transfers);
             this.PanelNavegacion.Controls.Add(this.Btn_Teachers);
-            this.PanelNavegacion.Controls.Add(this.BtnStaticItems);
             this.PanelNavegacion.Controls.Add(this.BtnLocations);
             this.PanelNavegacion.Controls.Add(this.BtnAccountingBooks);
             this.PanelNavegacion.Controls.Add(this.BtnBanks);
             this.PanelNavegacion.Controls.Add(this.BtnChecks);
             this.PanelNavegacion.Controls.Add(this.BtnBills);
-            this.PanelNavegacion.Controls.Add(this.BtnKardex);
+            this.PanelNavegacion.Controls.Add(this.Btn_Inventory);
             this.PanelNavegacion.Controls.Add(this.BtnOrders);
             this.PanelNavegacion.Controls.Add(this.BtnCounts);
             this.PanelNavegacion.Controls.Add(this.BtnSuppliers);
@@ -1667,7 +1625,7 @@
             this.Btn_Transfers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.Btn_Transfers.Image = global::SECRON.Properties.Resources.TransferNegro25x25;
             this.Btn_Transfers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Btn_Transfers.Location = new System.Drawing.Point(0, 590);
+            this.Btn_Transfers.Location = new System.Drawing.Point(0, 555);
             this.Btn_Transfers.Margin = new System.Windows.Forms.Padding(0);
             this.Btn_Transfers.Name = "Btn_Transfers";
             this.Btn_Transfers.Size = new System.Drawing.Size(200, 35);
@@ -1690,7 +1648,7 @@
             this.Btn_Teachers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.Btn_Teachers.Image = global::SECRON.Properties.Resources.GraduacionNegro25x25;
             this.Btn_Teachers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Btn_Teachers.Location = new System.Drawing.Point(0, 555);
+            this.Btn_Teachers.Location = new System.Drawing.Point(0, 520);
             this.Btn_Teachers.Margin = new System.Windows.Forms.Padding(0);
             this.Btn_Teachers.Name = "Btn_Teachers";
             this.Btn_Teachers.Size = new System.Drawing.Size(200, 35);
@@ -1701,29 +1659,6 @@
             this.Btn_Teachers.Visible = false;
             this.Btn_Teachers.Click += new System.EventHandler(this.Btn_Teachers_Click);
             this.Btn_Teachers.MouseEnter += new System.EventHandler(this.Btn_Teachers_MouseEnter);
-            // 
-            // BtnStaticItems
-            // 
-            this.BtnStaticItems.BackColor = System.Drawing.Color.White;
-            this.BtnStaticItems.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnStaticItems.FlatAppearance.BorderSize = 0;
-            this.BtnStaticItems.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnStaticItems.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnStaticItems.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnStaticItems.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnStaticItems.Image = global::SECRON.Properties.Resources.ArticleNegro25x25;
-            this.BtnStaticItems.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnStaticItems.Location = new System.Drawing.Point(0, 520);
-            this.BtnStaticItems.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnStaticItems.Name = "BtnStaticItems";
-            this.BtnStaticItems.Size = new System.Drawing.Size(200, 35);
-            this.BtnStaticItems.TabIndex = 54;
-            this.BtnStaticItems.Text = "ACTIVOS FIJOS";
-            this.BtnStaticItems.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnStaticItems.UseVisualStyleBackColor = false;
-            this.BtnStaticItems.Visible = false;
-            this.BtnStaticItems.Click += new System.EventHandler(this.BtnStaticItems_Click);
-            this.BtnStaticItems.MouseEnter += new System.EventHandler(this.BtnStaticItems_MouseEnter);
             // 
             // BtnLocations
             // 
@@ -1840,28 +1775,28 @@
             this.BtnBills.Click += new System.EventHandler(this.BtnBills_Click);
             this.BtnBills.MouseEnter += new System.EventHandler(this.BtnBills_MouseEnter);
             // 
-            // BtnKardex
+            // Btn_Inventory
             // 
-            this.BtnKardex.BackColor = System.Drawing.Color.White;
-            this.BtnKardex.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKardex.FlatAppearance.BorderSize = 0;
-            this.BtnKardex.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKardex.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKardex.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKardex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKardex.Image = global::SECRON.Properties.Resources.KardexNegro25x25;
-            this.BtnKardex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardex.Location = new System.Drawing.Point(0, 310);
-            this.BtnKardex.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKardex.Name = "BtnKardex";
-            this.BtnKardex.Size = new System.Drawing.Size(200, 35);
-            this.BtnKardex.TabIndex = 48;
-            this.BtnKardex.Text = "KARDEX";
-            this.BtnKardex.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKardex.UseVisualStyleBackColor = false;
-            this.BtnKardex.Visible = false;
-            this.BtnKardex.Click += new System.EventHandler(this.BtnKardex_Click);
-            this.BtnKardex.MouseEnter += new System.EventHandler(this.BtnKardex_MouseEnter);
+            this.Btn_Inventory.BackColor = System.Drawing.Color.White;
+            this.Btn_Inventory.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Btn_Inventory.FlatAppearance.BorderSize = 0;
+            this.Btn_Inventory.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.Btn_Inventory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Inventory.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.Btn_Inventory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.Btn_Inventory.Image = global::SECRON.Properties.Resources.KardexNegro25x25;
+            this.Btn_Inventory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Btn_Inventory.Location = new System.Drawing.Point(0, 310);
+            this.Btn_Inventory.Margin = new System.Windows.Forms.Padding(0);
+            this.Btn_Inventory.Name = "Btn_Inventory";
+            this.Btn_Inventory.Size = new System.Drawing.Size(200, 35);
+            this.Btn_Inventory.TabIndex = 48;
+            this.Btn_Inventory.Text = "INVENTARIO";
+            this.Btn_Inventory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Btn_Inventory.UseVisualStyleBackColor = false;
+            this.Btn_Inventory.Visible = false;
+            this.Btn_Inventory.Click += new System.EventHandler(this.Btn_Inventory_Click);
+            this.Btn_Inventory.MouseEnter += new System.EventHandler(this.BtnKardex_MouseEnter);
             // 
             // BtnOrders
             // 
@@ -2628,56 +2563,140 @@
             this.BtnTransfersManagment.UseVisualStyleBackColor = false;
             this.BtnTransfersManagment.Click += new System.EventHandler(this.BtnTransfersManagment_Click);
             // 
-            // PanelKARDEX_1
+            // PanelInventory_1
             // 
-            this.PanelKARDEX_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.PanelKARDEX_1.Controls.Add(this.BtnKARDEX_CatalogLocationsCategories);
-            this.PanelKARDEX_1.Controls.Add(this.BtnKARDEX_ItemsManagment);
-            this.PanelKARDEX_1.Location = new System.Drawing.Point(500, 1);
-            this.PanelKARDEX_1.Name = "PanelKARDEX_1";
-            this.PanelKARDEX_1.Size = new System.Drawing.Size(300, 80);
-            this.PanelKARDEX_1.TabIndex = 27;
-            this.PanelKARDEX_1.Visible = false;
+            this.PanelInventory_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.PanelInventory_1.Controls.Add(this.BtnKardexInsumosSedes);
+            this.PanelInventory_1.Controls.Add(this.BtnKardexValorizacion);
+            this.PanelInventory_1.Controls.Add(this.BtnKardexInventory);
+            this.PanelInventory_1.Controls.Add(this.BtnKardexInventoryReport);
+            this.PanelInventory_1.Controls.Add(this.BtnKardex_CatalogLocationsCategories);
+            this.PanelInventory_1.Controls.Add(this.BtnKardex_ItemsManagment);
+            this.PanelInventory_1.Location = new System.Drawing.Point(500, 1);
+            this.PanelInventory_1.Name = "PanelInventory_1";
+            this.PanelInventory_1.Size = new System.Drawing.Size(300, 240);
+            this.PanelInventory_1.TabIndex = 27;
+            this.PanelInventory_1.Visible = false;
             // 
-            // BtnKARDEX_CatalogLocationsCategories
+            // BtnKardexInsumosSedes
             // 
-            this.BtnKARDEX_CatalogLocationsCategories.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKARDEX_CatalogLocationsCategories.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKARDEX_CatalogLocationsCategories.FlatAppearance.BorderSize = 0;
-            this.BtnKARDEX_CatalogLocationsCategories.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKARDEX_CatalogLocationsCategories.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKARDEX_CatalogLocationsCategories.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKARDEX_CatalogLocationsCategories.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKARDEX_CatalogLocationsCategories.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKARDEX_CatalogLocationsCategories.Location = new System.Drawing.Point(0, 35);
-            this.BtnKARDEX_CatalogLocationsCategories.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKARDEX_CatalogLocationsCategories.Name = "BtnKARDEX_CatalogLocationsCategories";
-            this.BtnKARDEX_CatalogLocationsCategories.Size = new System.Drawing.Size(300, 35);
-            this.BtnKARDEX_CatalogLocationsCategories.TabIndex = 45;
-            this.BtnKARDEX_CatalogLocationsCategories.Text = "CATÁLOGO POR CATEGORÍAS";
-            this.BtnKARDEX_CatalogLocationsCategories.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKARDEX_CatalogLocationsCategories.UseVisualStyleBackColor = false;
-            this.BtnKARDEX_CatalogLocationsCategories.Click += new System.EventHandler(this.BtnKARDEX_CatalogLocationsCategories_Click);
+            this.BtnKardexInsumosSedes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardexInsumosSedes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardexInsumosSedes.FlatAppearance.BorderSize = 0;
+            this.BtnKardexInsumosSedes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardexInsumosSedes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardexInsumosSedes.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardexInsumosSedes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardexInsumosSedes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInsumosSedes.Location = new System.Drawing.Point(0, 175);
+            this.BtnKardexInsumosSedes.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardexInsumosSedes.Name = "BtnKardexInsumosSedes";
+            this.BtnKardexInsumosSedes.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardexInsumosSedes.TabIndex = 52;
+            this.BtnKardexInsumosSedes.Text = "CONTROL DE INSUMOS EN SEDES";
+            this.BtnKardexInsumosSedes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInsumosSedes.UseVisualStyleBackColor = false;
+            this.BtnKardexInsumosSedes.Click += new System.EventHandler(this.BtnKardexInsumosSedes_Click);
             // 
-            // BtnKARDEX_ItemsManagment
+            // BtnKardexValorizacion
             // 
-            this.BtnKARDEX_ItemsManagment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
-            this.BtnKARDEX_ItemsManagment.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnKARDEX_ItemsManagment.FlatAppearance.BorderSize = 0;
-            this.BtnKARDEX_ItemsManagment.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
-            this.BtnKARDEX_ItemsManagment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnKARDEX_ItemsManagment.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.BtnKARDEX_ItemsManagment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.BtnKARDEX_ItemsManagment.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKARDEX_ItemsManagment.Location = new System.Drawing.Point(0, 0);
-            this.BtnKARDEX_ItemsManagment.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnKARDEX_ItemsManagment.Name = "BtnKARDEX_ItemsManagment";
-            this.BtnKARDEX_ItemsManagment.Size = new System.Drawing.Size(300, 35);
-            this.BtnKARDEX_ItemsManagment.TabIndex = 44;
-            this.BtnKARDEX_ItemsManagment.Text = "CATÁLOGO GENERAL DE ARTÍCULOS";
-            this.BtnKARDEX_ItemsManagment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnKARDEX_ItemsManagment.UseVisualStyleBackColor = false;
-            this.BtnKARDEX_ItemsManagment.Click += new System.EventHandler(this.BtnKARDEX_ItemsManagment_Click);
+            this.BtnKardexValorizacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardexValorizacion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardexValorizacion.FlatAppearance.BorderSize = 0;
+            this.BtnKardexValorizacion.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardexValorizacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardexValorizacion.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardexValorizacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardexValorizacion.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexValorizacion.Location = new System.Drawing.Point(0, 140);
+            this.BtnKardexValorizacion.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardexValorizacion.Name = "BtnKardexValorizacion";
+            this.BtnKardexValorizacion.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardexValorizacion.TabIndex = 51;
+            this.BtnKardexValorizacion.Text = "VALORIZACIÓN Y COSTOS";
+            this.BtnKardexValorizacion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexValorizacion.UseVisualStyleBackColor = false;
+            this.BtnKardexValorizacion.Click += new System.EventHandler(this.BtnKardexValorizacion_Click);
+            // 
+            // BtnKardexInventory
+            // 
+            this.BtnKardexInventory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardexInventory.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardexInventory.FlatAppearance.BorderSize = 0;
+            this.BtnKardexInventory.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardexInventory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardexInventory.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardexInventory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardexInventory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInventory.Location = new System.Drawing.Point(0, 105);
+            this.BtnKardexInventory.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardexInventory.Name = "BtnKardexInventory";
+            this.BtnKardexInventory.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardexInventory.TabIndex = 50;
+            this.BtnKardexInventory.Text = "CONTROL DE INVENTARIOS";
+            this.BtnKardexInventory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInventory.UseVisualStyleBackColor = false;
+            this.BtnKardexInventory.Click += new System.EventHandler(this.BtnKardexInventory_Click);
+            // 
+            // BtnKardexInventoryReport
+            // 
+            this.BtnKardexInventoryReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardexInventoryReport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardexInventoryReport.FlatAppearance.BorderSize = 0;
+            this.BtnKardexInventoryReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardexInventoryReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardexInventoryReport.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardexInventoryReport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardexInventoryReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInventoryReport.Location = new System.Drawing.Point(0, 70);
+            this.BtnKardexInventoryReport.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardexInventoryReport.Name = "BtnKardexInventoryReport";
+            this.BtnKardexInventoryReport.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardexInventoryReport.TabIndex = 49;
+            this.BtnKardexInventoryReport.Text = "REPORTES DE INVENTARIO";
+            this.BtnKardexInventoryReport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardexInventoryReport.UseVisualStyleBackColor = false;
+            this.BtnKardexInventoryReport.Click += new System.EventHandler(this.BtnKardexInventoryReport_Click);
+            // 
+            // BtnKardex_CatalogLocationsCategories
+            // 
+            this.BtnKardex_CatalogLocationsCategories.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardex_CatalogLocationsCategories.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardex_CatalogLocationsCategories.FlatAppearance.BorderSize = 0;
+            this.BtnKardex_CatalogLocationsCategories.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardex_CatalogLocationsCategories.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardex_CatalogLocationsCategories.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardex_CatalogLocationsCategories.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardex_CatalogLocationsCategories.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardex_CatalogLocationsCategories.Location = new System.Drawing.Point(0, 35);
+            this.BtnKardex_CatalogLocationsCategories.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardex_CatalogLocationsCategories.Name = "BtnKardex_CatalogLocationsCategories";
+            this.BtnKardex_CatalogLocationsCategories.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardex_CatalogLocationsCategories.TabIndex = 45;
+            this.BtnKardex_CatalogLocationsCategories.Text = "CATÁLOGO POR CATEGORÍAS";
+            this.BtnKardex_CatalogLocationsCategories.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardex_CatalogLocationsCategories.UseVisualStyleBackColor = false;
+            this.BtnKardex_CatalogLocationsCategories.Click += new System.EventHandler(this.BtnKARDEX_CatalogLocationsCategories_Click);
+            // 
+            // BtnKardex_ItemsManagment
+            // 
+            this.BtnKardex_ItemsManagment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(224)))), ((int)(((byte)(222)))));
+            this.BtnKardex_ItemsManagment.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BtnKardex_ItemsManagment.FlatAppearance.BorderSize = 0;
+            this.BtnKardex_ItemsManagment.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(143)))), ((int)(((byte)(109)))));
+            this.BtnKardex_ItemsManagment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnKardex_ItemsManagment.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.BtnKardex_ItemsManagment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.BtnKardex_ItemsManagment.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardex_ItemsManagment.Location = new System.Drawing.Point(0, 0);
+            this.BtnKardex_ItemsManagment.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnKardex_ItemsManagment.Name = "BtnKardex_ItemsManagment";
+            this.BtnKardex_ItemsManagment.Size = new System.Drawing.Size(300, 35);
+            this.BtnKardex_ItemsManagment.TabIndex = 44;
+            this.BtnKardex_ItemsManagment.Text = "CATÁLOGO GENERAL DE ARTÍCULOS";
+            this.BtnKardex_ItemsManagment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnKardex_ItemsManagment.UseVisualStyleBackColor = false;
+            this.BtnKardex_ItemsManagment.Click += new System.EventHandler(this.BtnKARDEX_ItemsManagment_Click);
             // 
             // Frm_ControlCenter_MDI
             // 
@@ -2685,7 +2704,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1384, 736);
-            this.Controls.Add(this.PanelKARDEX_1);
+            this.Controls.Add(this.PanelInventory_1);
             this.Controls.Add(this.PanelTransfers);
             this.Controls.Add(this.PanelTeachers_5);
             this.Controls.Add(this.PanelTeachers_4);
@@ -2700,7 +2719,7 @@
             this.Controls.Add(this.PanelBanks);
             this.Controls.Add(this.PanelChecks);
             this.Controls.Add(this.PanelBills);
-            this.Controls.Add(this.PanelKardex);
+            this.Controls.Add(this.PanelInventory);
             this.Controls.Add(this.PanelOrders);
             this.Controls.Add(this.PanelCounts);
             this.Controls.Add(this.PanelSuppliers);
@@ -2722,7 +2741,7 @@
             this.PanelSuppliers.ResumeLayout(false);
             this.PanelCounts.ResumeLayout(false);
             this.PanelOrders.ResumeLayout(false);
-            this.PanelKardex.ResumeLayout(false);
+            this.PanelInventory.ResumeLayout(false);
             this.PanelBills.ResumeLayout(false);
             this.PanelChecks.ResumeLayout(false);
             this.PanelBanks.ResumeLayout(false);
@@ -2744,7 +2763,7 @@
             this.PanelTeachers_4.ResumeLayout(false);
             this.PanelTeachers_5.ResumeLayout(false);
             this.PanelTransfers.ResumeLayout(false);
-            this.PanelKARDEX_1.ResumeLayout(false);
+            this.PanelInventory_1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2771,12 +2790,7 @@
         private System.Windows.Forms.Button BtnOrdersManagment;
         private System.Windows.Forms.Button BtnOrdersRequisicionManagment;
         private System.Windows.Forms.Button BtnOrdersSolicitud;
-        private System.Windows.Forms.Panel PanelKardex;
-        private System.Windows.Forms.Button BtnKardexInventoryReport;
-        private System.Windows.Forms.Button BtnKardexInsumosSedes;
-        private System.Windows.Forms.Button BtnKardexValorizacion;
-        private System.Windows.Forms.Button BtnKardexInventory;
-        private System.Windows.Forms.Button BtnKardexCatalogo;
+        private System.Windows.Forms.Panel PanelInventory;
         private System.Windows.Forms.Panel PanelBills;
         private System.Windows.Forms.Button BtnBillsCatalog;
         private System.Windows.Forms.Button BtnBillsReports;
@@ -2828,13 +2842,12 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel PanelPadding1;
         private System.Windows.Forms.Panel PanelNavegacion;
-        private System.Windows.Forms.Button BtnStaticItems;
         private System.Windows.Forms.Button BtnLocations;
         private System.Windows.Forms.Button BtnAccountingBooks;
         private System.Windows.Forms.Button BtnBanks;
         private System.Windows.Forms.Button BtnChecks;
         private System.Windows.Forms.Button BtnBills;
-        private System.Windows.Forms.Button BtnKardex;
+        private System.Windows.Forms.Button Btn_Inventory;
         private System.Windows.Forms.Button BtnOrders;
         private System.Windows.Forms.Button BtnCounts;
         private System.Windows.Forms.Button BtnSuppliers;
@@ -2882,8 +2895,15 @@
         private System.Windows.Forms.Panel PanelTransfers;
         private System.Windows.Forms.Button BtnTransfersReports;
         private System.Windows.Forms.Button BtnTransfersManagment;
-        private System.Windows.Forms.Panel PanelKARDEX_1;
-        private System.Windows.Forms.Button BtnKARDEX_CatalogLocationsCategories;
-        private System.Windows.Forms.Button BtnKARDEX_ItemsManagment;
+        private System.Windows.Forms.Panel PanelInventory_1;
+        private System.Windows.Forms.Button BtnKardex_CatalogLocationsCategories;
+        private System.Windows.Forms.Button BtnKardex_ItemsManagment;
+        private System.Windows.Forms.Button BtnInvStaticItems;
+        private System.Windows.Forms.Button BtnInvKardex;
+        private System.Windows.Forms.Button BtnInvWarehouse;
+        private System.Windows.Forms.Button BtnKardexInsumosSedes;
+        private System.Windows.Forms.Button BtnKardexValorizacion;
+        private System.Windows.Forms.Button BtnKardexInventory;
+        private System.Windows.Forms.Button BtnKardexInventoryReport;
     }
 }

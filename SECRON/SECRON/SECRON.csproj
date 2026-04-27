@@ -271,6 +271,12 @@
     <Compile Include="Views\Frm_Checks_Reports.Designer.cs">
       <DependentUpon>Frm_Checks_Reports.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Frm_Checks_Reports_Filters_Date.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_Checks_Reports_Filters_Date.Designer.cs">
+      <DependentUpon>Frm_Checks_Reports_Filters_Date.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Frm_Checks_ReverseCancellation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -473,6 +479,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Checks_Reports.resx">
       <DependentUpon>Frm_Checks_Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_Checks_Reports_Filters_Date.resx">
+      <DependentUpon>Frm_Checks_Reports_Filters_Date.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Checks_ReverseCancellation.resx">
       <DependentUpon>Frm_Checks_ReverseCancellation.cs</DependentUpon>

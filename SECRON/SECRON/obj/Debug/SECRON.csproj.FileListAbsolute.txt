@@ -193,3 +193,4 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.ap
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.Up2Date
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.exe
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.pdb
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Checks_Reports_Filters_Date.resources

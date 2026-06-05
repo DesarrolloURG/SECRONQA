@@ -221,7 +221,7 @@ namespace SECRON.Views
             ConfigurarBotonSubmenuNavegacion(BtnLocationsStaff);
             // Panel de Navegación Submenú Activos Fijos
             ConfigurarBotonSubmenuNavegacion(BtnStaticItemsManagment);
-            ConfigurarBotonSubmenuNavegacion(BtnStaticItemsDepreciation);
+            ConfigurarBotonSubmenuNavegacion(BtnStaticItemsCategories);
             ConfigurarBotonSubmenuNavegacion(BtnStaticItemsMaintenance);
             ConfigurarBotonSubmenuNavegacion(BtnStaticItemsMovementsController);
             ConfigurarBotonSubmenuNavegacion(BtnStaticItemsReports);
@@ -271,7 +271,7 @@ namespace SECRON.Views
 
             // Panel de Navegación SubSubmenú ACTIVOS FIJOS
             ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsManagment);
-            ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsDepreciation);
+            ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsCategories);
             ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsMaintenance);
             ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsMovementsController);
             ConfigurarBotonSubSubmenuNavegacion(BtnStaticItemsReports);
@@ -925,7 +925,7 @@ namespace SECRON.Views
 
             // ========== ACTIVOS FIJOS ==========
             BtnStaticItemsManagment.Visible = TienePermiso("STATICITEMS_MANAGMENT");
-            BtnStaticItemsDepreciation.Visible = TienePermiso("STATICITEMS_DEPRECIATION");
+            BtnStaticItemsCategories.Visible = TienePermiso("STATICITEMS_DEPRECIATION");
             BtnStaticItemsMaintenance.Visible = TienePermiso("STATICITEMS_MAINTENANCE");
             BtnStaticItemsMovementsController.Visible = TienePermiso("STATICITEMS_MOVEMENTS");
             BtnStaticItemsReports.Visible = TienePermiso("STATICITEMS_REPORTS");
@@ -1961,11 +1961,10 @@ namespace SECRON.Views
         private void BtnStaticItemsManagment_Click(object sender, EventArgs e)
         {
             CerrarTodosLosPaneles();
-            //Frm_FixedAssetCategories frm = new Frm_FixedAssetCategories();
-            Form frm = new Form();
+            Frm_FixedAsset frm = new Frm_FixedAsset();
             frm.Text = "Catálogo General de Activos";
             frm.BackColor = Color.White;
-            //frm.UserData = this.UserData;
+            frm.UserData = this.UserData;
 
             AbrirFormularioConPestana(frm, "Catálogo General de Activos", "StaticItemsManagment");
         }
@@ -1974,11 +1973,13 @@ namespace SECRON.Views
         {
             CerrarTodosLosPaneles();
             // Crear tu formulario específico (reemplaza con el formulario real)
-            Form frm = new Form();
-            frm.Text = "Control de Movimientos";
+            Frm_FixedAsset_Movements frm = new Frm_FixedAsset_Movements();
+            frm.Text = "Traslados de Activos";
             frm.BackColor = Color.White;
+            //Pasamos los datos del usuario
+            frm.UserData = this.UserData;
 
-            AbrirFormularioConPestana(frm, "Control de Movimientos", "StaticItemsMovementsController");
+            AbrirFormularioConPestana(frm, "Traslados de Activos", "StaticItemsMovementsController");
         }
 
         private void BtnStaticItemsReports_Click(object sender, EventArgs e)
@@ -2002,7 +2003,18 @@ namespace SECRON.Views
 
             AbrirFormularioConPestana(frm, "Cartas de Responsabilidad", "StaticItemsResponsabilityLetter");
         }
+        private void BtnStaticItemsCategories_Click(object sender, EventArgs e)
+        {
+            CerrarTodosLosPaneles();
+            // Crear tu formulario específico (reemplaza con el formulario real)
+            Frm_FixedAssetCategories frm = new Frm_FixedAssetCategories();
+            frm.Text = "Categoría de Activos";
+            frm.BackColor = Color.White;
+            //Pasamos los datos del usuario
+            frm.UserData = this.UserData;
 
+            AbrirFormularioConPestana(frm, "Categoría de Activos", "StaticItemsCategories");
+        }
         private void BtnKARDEX_ItemsManagment_Click(object sender, EventArgs e)
         {
             CerrarTodosLosPaneles();
@@ -2482,5 +2494,7 @@ namespace SECRON.Views
 
 
         #endregion EventoFormClosing
+
+        
     }
 }

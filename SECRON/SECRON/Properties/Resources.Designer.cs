@@ -243,6 +243,16 @@ namespace SECRON.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Filtrar {
+            get {
+                object obj = ResourceManager.GetObject("Filtrar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FinancesNegro25x25 {
             get {
                 object obj = ResourceManager.GetObject("FinancesNegro25x25", resourceCulture);
@@ -383,6 +393,26 @@ namespace SECRON.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap KardexBlanco20x20 {
+            get {
+                object obj = ResourceManager.GetObject("KardexBlanco20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap KardexNegro20x20 {
+            get {
+                object obj = ResourceManager.GetObject("KardexNegro20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap KardexNegro25x25 {
             get {
                 object obj = ResourceManager.GetObject("KardexNegro25x25", resourceCulture);
@@ -413,9 +443,39 @@ namespace SECRON.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LocationBlanco20x20 {
+            get {
+                object obj = ResourceManager.GetObject("LocationBlanco20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LocationNegro20x20 {
+            get {
+                object obj = ResourceManager.GetObject("LocationNegro20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LocationNegro25x25 {
             get {
                 object obj = ResourceManager.GetObject("LocationNegro25x25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LogoMembretadoEncabezado {
+            get {
+                object obj = ResourceManager.GetObject("LogoMembretadoEncabezado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -466,6 +526,16 @@ namespace SECRON.Properties {
         internal static System.Drawing.Bitmap MegafonoNegro20x20 {
             get {
                 object obj = ResourceManager.GetObject("MegafonoNegro20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MembretadoPiePagina {
+            get {
+                object obj = ResourceManager.GetObject("MembretadoPiePagina", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -583,6 +653,16 @@ namespace SECRON.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SelloCoordinacion_Black {
+            get {
+                object obj = ResourceManager.GetObject("SelloCoordinacion_Black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ShopsNegro25x25 {
             get {
                 object obj = ResourceManager.GetObject("ShopsNegro25x25", resourceCulture);
@@ -636,6 +716,16 @@ namespace SECRON.Properties {
         internal static System.Drawing.Bitmap TransferNegro25x25 {
             get {
                 object obj = ResourceManager.GetObject("TransferNegro25x25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap trash25x25 {
+            get {
+                object obj = ResourceManager.GetObject("trash25x25", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

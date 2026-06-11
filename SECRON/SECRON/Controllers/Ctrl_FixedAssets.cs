@@ -75,14 +75,17 @@ namespace SECRON.Controllers
             return lista;
         }
 
-        
+
         public static List<Mdl_FixedAsset> BuscarActivos(
-            string textoBusqueda = "",
-            string filtro1 = "TODOS",
-            string filtroEstado = "TODOS",
-            int? categoriaId = null,
-            int pageNumber = 1,
-            int pageSize = 100)
+    string textoBusqueda = "",
+    string filtro1 = "TODOS",
+    string filtroEstado = "TODOS",
+    int? categoriaId = null,
+    int? classificationId = null,
+    string assetStatus = null,
+    int? employeeId = null,
+    int pageNumber = 1,
+    int pageSize = 100)
         {
             List<Mdl_FixedAsset> lista = new List<Mdl_FixedAsset>();
             try
@@ -91,36 +94,36 @@ namespace SECRON.Controllers
                 using (SqlConnection connection = DatabaseConfig.StartConection())
                 {
                     string query = @"
-                        SELECT fa.AssetId, fa.AssetCode, fa.AssetName, fa.Description,
-                               fa.AssetCategoryId, 
-                               (SELECT av.Value FROM FixedAssetAttributeValues av
-                                 INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
-                                 WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'BRAND' AND ad.IsSystem = 1) AS Brand, 
-                               (SELECT av.Value FROM FixedAssetAttributeValues av
-                                 INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
-                                 WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'MODEL' AND ad.IsSystem = 1) AS Model,
-                                (SELECT av.Value FROM FixedAssetAttributeValues av
-                                 INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
-                                 WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'SERIAL' AND ad.IsSystem = 1) AS Serial,
-                               fa.PurchaseDate, fa.PurchaseValue, fa.ResidualValue,
-                               fa.InvoiceNumber, fa.SupplierId,
-                               fa.WarrantyDocumentPath, fa.WarrantyExpirationDate,
-                               fa.DepreciationStartDate, fa.ResidualValueAct,
-                               fa.CurrentWarehouseId, fa.AssignedToEmployeeId,
-                               fa.AssetStatus, fa.DisposalDate, fa.DisposalReason,
-                               fa.DisposalValue, fa.Notes,
-                               fa.IsActive, fa.CreatedDate, fa.CreatedBy,
-                               fa.ModifiedDate, fa.ModifiedBy,
-                               fac.CategoryName,
-                               s.SupplierName,
-                               w.WarehouseName,
-                               ISNULL(e.FullName, ISNULL(e.FirstName + ' ' + e.LastName, '')) AS EmployeeName
-                        FROM   FixedAssets fa
-                        LEFT JOIN FixedAssetCategories      fac ON fa.AssetCategoryId     = fac.AssetCategoryId
-                        LEFT JOIN Suppliers                 s   ON fa.SupplierId           = s.SupplierId
-                        LEFT JOIN Warehouses                w   ON fa.CurrentWarehouseId   = w.WarehouseId
-                        LEFT JOIN Employees                 e   ON fa.AssignedToEmployeeId = e.EmployeeId
-                        WHERE  1=1";
+                SELECT fa.AssetId, fa.AssetCode, fa.AssetName, fa.Description,
+                       fa.AssetCategoryId,
+                       (SELECT av.Value FROM FixedAssetAttributeValues av
+                         INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
+                         WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'BRAND' AND ad.IsSystem = 1) AS Brand,
+                       (SELECT av.Value FROM FixedAssetAttributeValues av
+                         INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
+                         WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'MODEL' AND ad.IsSystem = 1) AS Model,
+                       (SELECT av.Value FROM FixedAssetAttributeValues av
+                         INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
+                         WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'SERIAL' AND ad.IsSystem = 1) AS Serial,
+                       fa.PurchaseDate, fa.PurchaseValue, fa.ResidualValue,
+                       fa.InvoiceNumber, fa.SupplierId,
+                       fa.WarrantyDocumentPath, fa.WarrantyExpirationDate,
+                       fa.DepreciationStartDate, fa.ResidualValueAct,
+                       fa.CurrentWarehouseId, fa.AssignedToEmployeeId,
+                       fa.AssetStatus, fa.DisposalDate, fa.DisposalReason,
+                       fa.DisposalValue, fa.Notes,
+                       fa.IsActive, fa.CreatedDate, fa.CreatedBy,
+                       fa.ModifiedDate, fa.ModifiedBy,
+                       fac.CategoryName,
+                       s.SupplierName,
+                       w.WarehouseName,
+                       ISNULL(e.FullName, ISNULL(e.FirstName + ' ' + e.LastName, '')) AS EmployeeName
+                FROM   FixedAssets fa
+                LEFT JOIN FixedAssetCategories fac ON fa.AssetCategoryId     = fac.AssetCategoryId
+                LEFT JOIN Suppliers            s   ON fa.SupplierId           = s.SupplierId
+                LEFT JOIN Warehouses           w   ON fa.CurrentWarehouseId   = w.WarehouseId
+                LEFT JOIN Employees            e   ON fa.AssignedToEmployeeId = e.EmployeeId
+                WHERE  1=1";
 
                     List<SqlParameter> parametros = new List<SqlParameter>();
 
@@ -129,10 +132,28 @@ namespace SECRON.Controllers
                     else if (filtroEstado == "SOLO INACTIVOS")
                         query += " AND fa.IsActive = 0";
 
+                    if (!string.IsNullOrWhiteSpace(assetStatus))
+                    {
+                        query += " AND fa.AssetStatus = @assetStatus";
+                        parametros.Add(new SqlParameter("@assetStatus", assetStatus));
+                    }
+
                     if (categoriaId.HasValue)
                     {
                         query += " AND fa.AssetCategoryId = @categoriaId";
                         parametros.Add(new SqlParameter("@categoriaId", categoriaId.Value));
+                    }
+
+                    if (classificationId.HasValue)
+                    {
+                        query += " AND fac.ClassificationId = @classificationId";
+                        parametros.Add(new SqlParameter("@classificationId", classificationId.Value));
+                    }
+
+                    if (employeeId.HasValue)
+                    {
+                        query += " AND fa.AssignedToEmployeeId = @employeeId";
+                        parametros.Add(new SqlParameter("@employeeId", employeeId.Value));
                     }
 
                     if (!string.IsNullOrWhiteSpace(textoBusqueda))
@@ -148,7 +169,7 @@ namespace SECRON.Controllers
                         WHERE av.AssetId = fa.AssetId AND ad.AttributeKey = 'SERIAL' AND ad.IsSystem = 1
                         AND av.Value LIKE @texto)";
                         else
-                                            query += @" AND (fa.AssetCode LIKE @texto OR fa.AssetName LIKE @texto
+                            query += @" AND (fa.AssetCode LIKE @texto OR fa.AssetName LIKE @texto
                         OR EXISTS (
                             SELECT 1 FROM FixedAssetAttributeValues av
                             INNER JOIN FixedAssetAttributeDefinitions ad ON av.AttributeDefId = ad.AttributeDefId
@@ -158,7 +179,9 @@ namespace SECRON.Controllers
                         parametros.Add(new SqlParameter("@texto", "%" + textoBusqueda.Trim() + "%"));
                     }
 
-                    query += " ORDER BY fa.AssetCode OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
+                    query += @" ORDER BY fa.AssetCode
+                        OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
+
                     parametros.Add(new SqlParameter("@offset", offset));
                     parametros.Add(new SqlParameter("@pageSize", pageSize));
 
@@ -175,12 +198,11 @@ namespace SECRON.Controllers
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error en búsqueda de activos: " + ex.Message,
+                MessageBox.Show("Error al buscar activos: " + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return lista;
         }
-
 
         public static int ContarTotalActivos(string textoBusqueda = "", string filtroEstado = "SOLO ACTIVOS", int? categoriaId = null)
         {
@@ -457,6 +479,38 @@ namespace SECRON.Controllers
             catch (Exception ex)
             {
                 MessageBox.Show("Error al actualizar estado del activo: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return 0;
+            }
+        }
+        public static int ActualizarAsignacionActivo(
+        int assetId, int? empleadoId, int? bodegaId, int? modifiedBy = null)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConfig.StartConection())
+                {
+                    string query = @"
+                UPDATE FixedAssets SET
+                    AssignedToEmployeeId = @EmpleadoId,
+                    CurrentWarehouseId   = @BodegaId,
+                    ModifiedDate         = GETDATE(),
+                    ModifiedBy           = @ModifiedBy
+                WHERE AssetId = @AssetId";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@AssetId", assetId);
+                        cmd.Parameters.AddWithValue("@EmpleadoId", (object)empleadoId ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BodegaId", (object)bodegaId ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ModifiedBy", (object)modifiedBy ?? DBNull.Value);
+                        return cmd.ExecuteNonQuery() > 0 ? 1 : -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar asignación: " + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }

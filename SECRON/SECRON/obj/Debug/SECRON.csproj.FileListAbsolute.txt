@@ -221,3 +221,9 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_FixedAsset_Movements_Tracking.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_FixedAsset_StatusMovements.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_FixedAsset_TransferStatusTransitions.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_Technology.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_SearchSubCategory.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_Technology_ResponsabilityLetter.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_FixedAsset_SearchClassificationCategories.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_Users_Managment.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_Users_RolesPermissions.resources

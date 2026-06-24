@@ -24,7 +24,7 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://localhost:81/</InstallUrl>
-    <MinimumRequiredVersion>2.0.0.11</MinimumRequiredVersion>
+    <MinimumRequiredVersion>2.0.0.12</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
@@ -826,6 +826,10 @@
     <None Include="Img\KardexNegro20x20.png" />
     <None Include="Img\KardexBlanco20x20.png" />
     <None Include="Img\Filtrar.png" />
+    <None Include="Img\UploadFileWhite20x20.png" />
+    <None Include="Img\UploadFileWhite25x25.png" />
+    <None Include="Img\UploadFileBlack20x20.png" />
+    <None Include="Img\UploadFileBlack25x25.png" />
     <Content Include="SistemaSECRON-QA.ico" />
     <None Include="Resources\VisibleBlack 25x25.png" />
     <None Include="Resources\Visible 25x25.png" />

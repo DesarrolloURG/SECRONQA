@@ -743,6 +743,46 @@ namespace SECRON.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap UploadFileBlack20x20 {
+            get {
+                object obj = ResourceManager.GetObject("UploadFileBlack20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UploadFileBlack25x25 {
+            get {
+                object obj = ResourceManager.GetObject("UploadFileBlack25x25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UploadFileWhite20x20 {
+            get {
+                object obj = ResourceManager.GetObject("UploadFileWhite20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UploadFileWhite25x25 {
+            get {
+                object obj = ResourceManager.GetObject("UploadFileWhite25x25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap URG_LOGO_BLANCO {
             get {
                 object obj = ResourceManager.GetObject("URG-LOGO_BLANCO", resourceCulture);

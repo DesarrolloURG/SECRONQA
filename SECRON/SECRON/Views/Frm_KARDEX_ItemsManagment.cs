@@ -70,17 +70,16 @@ namespace SECRON.Views
                 ConfigurarFiltros();
                 ConfigurarCombosHas();
                 CrearToolStripPaginacion();
-
-                CargarArticulos();
-                ActualizarInfoPaginacion();
                 CargarProximoCodigoItem();
 
-                // CARGAR PERMISOS DEL USUARIO
                 if (UserData != null)
                 {
                     await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
                     ConfigurarControlesPorPermisos();
                 }
+
+                CargarArticulos();
+                ActualizarInfoPaginacion();
 
                 this.Cursor = Cursors.Default;
             }
@@ -419,8 +418,8 @@ namespace SECRON.Views
         {
             try
             {
-                if (Tabla.SelectedRows.Count == 0)
-                    return;
+                if (Tabla.SelectedRows.Count == 0) return;
+                if (_itemsList == null) return;
 
                 DataGridViewRow fila = Tabla.SelectedRows[0];
                 int itemId = Convert.ToInt32(fila.Cells["ItemId"].Value);
@@ -1581,7 +1580,37 @@ namespace SECRON.Views
             AplicarEstadoBotonPorPermiso(Btn_Import, "KARDEX_CATALOG_IMPORT");
             AplicarEstadoBotonPorPermiso(Btn_Search, "KARDEX_CATALOG_READ");
 
+            AplicarEstadoBotonPorPermiso(Btn_SearchCategory, "KARDEX_CATALOG_READ");
+            AplicarEstadoBotonPorPermiso(Btn_SearchSubCategory, "KARDEX_CATALOG_READ");
+            AplicarEstadoBotonPorPermiso(Btn_SearchMeasurementUnits, "KARDEX_CATALOG_READ");
+
         }
+
         #endregion SistemaDePermisos
+        #region ImportarListados
+        private void Btn_Import_Click(object sender, EventArgs e)
+        {
+            if (!Btn_Import.Enabled) return;
+            try
+            {
+                using (var frm = new Frm_KARDEX_ImportItems())
+                {
+                    frm.UserData = this.UserData;
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog(this);
+
+                    RefrescarListado();
+                    ConfigurarTabla();
+                    AjustarColumnas();
+                    ActualizarInfoPaginacion();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR AL ABRIR IMPORTACIÓN: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion ImportarListados
     }
 }

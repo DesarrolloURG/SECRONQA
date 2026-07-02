@@ -44,39 +44,34 @@ namespace SECRON.Views
         //private ToolStripLabel lblPaginaInfo;
         private bool _cargandoFormulario = true;
         // Evento Load del formulario
-        private void Frm_Employees_Managment_Load(object sender, EventArgs e)
+        private async void Frm_Employees_Managment_Load(object sender, EventArgs e)
         {
             try
             {
                 _cargandoFormulario = true;
 
-                // Configuración visual y de navegación
                 ConfigurarTabIndexYFocus();
                 ConfigurarPlaceHoldersTextbox();
                 ConfigurarMaxLengthTextBox();
                 ConfigurarDateTimePickers();
-
-                // Configurar y cargar ComboBox (SIEMPRE primero)
                 ConfigurarComboBoxes();
-                CargarFiltros();
-
-                // Configuración de tabla y paginación
                 CrearToolStripPaginacion();
-                CargarEmpleados();
-                ActualizarInfoPaginacion();
-
-                // Scroll y eventos auxiliares
                 InicializarScroll();
                 ConfigurarEventosScroll();
-
-                // Estado inicial del formulario
                 CargarProximoCodigo();
                 HabilitarControlesEdicion(true, false);
 
-                // Evitar selección automática al iniciar
-                Tabla.ClearSelection();
+                if (UserData != null)
+                {
+                    await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
+                    ConfigurarControlesPorPermisos();
+                }
 
-                // Habilitar eventos (a partir de aquí ya es seguro)
+                CargarFiltros();
+                CargarEmpleados();
+                ActualizarInfoPaginacion();
+
+                Tabla.ClearSelection();
                 _cargandoFormulario = false;
 
                 this.Cursor = Cursors.Default;
@@ -87,22 +82,6 @@ namespace SECRON.Views
                 MessageBox.Show($"Error al cargar el formulario: {ex.Message}",
                               "Error SECRON", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // Configurar PlaceHolders en los TextBox
-            ConfigurarPlaceHoldersTextbox();
-            // Configurar tamaño máximo de los TextBox
-            ConfigurarMaxLengthTextBox();
-            // Configurar DateTimePicker
-            ConfigurarDateTimePickers();
-            // Configurar ScrollBar
-            InicializarScroll();
-            // Configurar eventos del Scroll
-            ConfigurarEventosScroll();
-            // Configurar ComboBoxes
-            ConfigurarComboBoxes();
-            // Cargar código de docente automático
-            CargarProximoCodigo();
-            // Activar/Desactivar controles
-            HabilitarControlesEdicion(true, false);
         }
         // Método separado
         private void FormularioResize(object sender, EventArgs e)
@@ -396,6 +375,7 @@ namespace SECRON.Views
         // Evento Click del botón Buscar
         private void Btn_Search_Click(object sender, EventArgs e)
         {
+            if (!Btn_Search.Enabled) return;
             ejecutarBusqueda();
         }
 
@@ -565,6 +545,7 @@ namespace SECRON.Views
         // Evento Click del botón Limpiar Búsqueda
         private void Btn_CleanSearch_Click(object sender, EventArgs e)
         {
+            if (!Btn_CleanSearch.Enabled) return;
             // Limpiar búsqueda
             Txt_ValorBuscado.Text = "BUSCAR POR NOMBRE, DEPARTAMENTO, DPI...";
             Txt_ValorBuscado.ForeColor = Color.Gray;
@@ -723,10 +704,14 @@ namespace SECRON.Views
         // Método para configurar la tabla
         public void ConfigurarTabla()
         {
-            // LIMPIAR COLUMNAS EXISTENTES
             Tabla.Columns.Clear();
 
-            // AGREGAR COLUMNAS MANUALMENTE
+            string[] docs = { "DPI", "TITULOS", "RTU", "COLEGIADO", "RENAS", "ANT_POLICIACOS", "ANT_PENALES" };
+            string[] headersAbrir = { "DPI (ABRIR)", "TÍTULOS (ABRIR)", "RTU (ABRIR)", "COLEGIADO (ABRIR)", "RENAS (ABRIR)", "ANT.POL. (ABRIR)", "ANT.PEN. (ABRIR)" };
+            string[] headersCargar = { "DPI (CARGAR)", "TÍTULOS (CARGAR)", "RTU (CARGAR)", "COLEGIADO (CARGAR)", "RENAS (CARGAR)", "ANT.POL. (CARGAR)", "ANT.PEN. (CARGAR)" };
+            string[] headersEstado = { "DPI (ESTADO)", "TÍTULOS (ESTADO)", "RTU (ESTADO)", "COLEGIADO (ESTADO)", "RENAS (ESTADO)", "ANT.POL. (ESTADO)", "ANT.PEN. (ESTADO)" };
+
+            // ===== COLUMNAS DE DATOS PRIMERO =====
             Tabla.Columns.Add("EmployeeId", "ID");
             Tabla.Columns.Add("EmployeeCode", "CÓDIGO");
             Tabla.Columns.Add("FullName", "NOMBRE COMPLETO");
@@ -742,10 +727,43 @@ namespace SECRON.Views
             Tabla.Columns.Add("Status", "ESTADO");
             Tabla.Columns.Add("CreatedBy", "CREADO POR");
 
-            // OCULTAR COLUMNA ID
             Tabla.Columns["EmployeeId"].Visible = false;
 
-            // CONFIGURACIÓN DE SELECCIÓN Y FORMATO
+            // ===== COLUMNAS DE ARCHIVOS AL FINAL (agrupadas por documento) =====
+            for (int i = 0; i < docs.Length; i++)
+            {
+                var colAbrir = new DataGridViewImageColumn();
+                colAbrir.Name = $"ColAbrir_{docs[i]}";
+                colAbrir.HeaderText = headersAbrir[i];
+                colAbrir.Width = 110;
+                colAbrir.ImageLayout = DataGridViewImageCellLayout.Zoom;
+                colAbrir.DefaultCellStyle.NullValue = Properties.Resources.SearchNegro25x25;
+                colAbrir.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                colAbrir.ToolTipText = headersAbrir[i];
+                Tabla.Columns.Add(colAbrir);
+
+                var colCargar = new DataGridViewImageColumn();
+                colCargar.Name = $"ColCargar_{docs[i]}";
+                colCargar.HeaderText = headersCargar[i];
+                colCargar.Width = 110;
+                colCargar.ImageLayout = DataGridViewImageCellLayout.Zoom;
+                colCargar.DefaultCellStyle.NullValue = Properties.Resources.UploadFileBlack25x25;
+                colCargar.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                colCargar.ToolTipText = headersCargar[i];
+                Tabla.Columns.Add(colCargar);
+
+                var colEstado = new DataGridViewImageColumn();
+                colEstado.Name = $"ColEstado_{docs[i]}";
+                colEstado.HeaderText = headersEstado[i];
+                colEstado.Width = 110;
+                colEstado.ImageLayout = DataGridViewImageCellLayout.Zoom;
+                colEstado.DefaultCellStyle.NullValue = Properties.Resources.InactivarRojo25x25;
+                colEstado.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                colEstado.ToolTipText = headersEstado[i];
+                Tabla.Columns.Add(colEstado);
+            }
+
+            // ===== CONFIGURACIÓN GENERAL =====
             Tabla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             Tabla.MultiSelect = false;
             Tabla.ReadOnly = true;
@@ -753,36 +771,37 @@ namespace SECRON.Views
             Tabla.AllowUserToAddRows = false;
             Tabla.RowHeadersVisible = false;
 
-            // ESTILO DE ENCABEZADOS
+            // ESTILO ENCABEZADOS
             Tabla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             Tabla.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             Tabla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(51, 140, 255);
             Tabla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
 
-            // ESTILO DE CELDAS
+            // ESTILO CELDAS
             Tabla.DefaultCellStyle.SelectionBackColor = Color.Azure;
             Tabla.DefaultCellStyle.SelectionForeColor = Color.Black;
             Tabla.DefaultCellStyle.BackColor = Color.WhiteSmoke;
             Tabla.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             Tabla.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
 
-            // ALTURA DE FILA Y BORDES
             Tabla.RowTemplate.Height = 30;
             Tabla.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            Tabla.AllowUserToResizeColumns = true;
+            Tabla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            Tabla.ScrollBars = ScrollBars.Both;
 
-            // AJUSTAR COLUMNAS
             AjustarColumnas();
 
-            // AGREGAR EVENTO DE SELECCIÓN
             Tabla.SelectionChanged -= Tabla_SelectionChanged;
             Tabla.SelectionChanged += Tabla_SelectionChanged;
-        }
 
+            Tabla.CellClick -= Tabla_CellClick_Archivos;
+            Tabla.CellClick += Tabla_CellClick_Archivos;
+        }
         private void ReferenciasLlavesForaneas()
         {
             Tabla.Rows.Clear();
 
-            // Obtener listas de referencia UNA SOLA VEZ para optimizar
             var departamentos = Ctrl_Employees.ObtenerDepartamentos();
             var puestos = Ctrl_Employees.ObtenerPuestos();
             var supervisores = Ctrl_Employees.ObtenerSupervisores();
@@ -791,43 +810,32 @@ namespace SECRON.Views
 
             foreach (var emp in empleadosList)
             {
-                // OBTENER NOMBRE DEL DEPARTAMENTO
                 string departamento = "N/A";
                 var dept = departamentos.FirstOrDefault(d => d.Key == emp.DepartmentId);
-                if (dept.Key > 0)
-                    departamento = dept.Value;
+                if (dept.Key > 0) departamento = dept.Value;
 
-                // OBTENER NOMBRE DEL PUESTO
                 string puesto = "N/A";
                 var pos = puestos.FirstOrDefault(p => p.Key == emp.PositionId);
-                if (pos.Key > 0)
-                    puesto = pos.Value;
+                if (pos.Key > 0) puesto = pos.Value;
 
-                // OBTENER NOMBRE DEL SUPERVISOR
                 string supervisor = "SIN SUPERVISOR";
                 if (emp.DirectSupervisorId.HasValue)
                 {
                     var sup = supervisores.FirstOrDefault(s => s.Key == emp.DirectSupervisorId.Value);
-                    if (sup.Key > 0)
-                        supervisor = sup.Value;
+                    if (sup.Key > 0) supervisor = sup.Value;
                 }
 
-                // OBTENER NOMBRE DE LA SEDE
                 string sede = "SIN SEDE";
                 if (emp.LocationId.HasValue)
                 {
                     var loc = sedes.FirstOrDefault(l => l.Key == emp.LocationId.Value);
-                    if (loc.Key > 0)
-                        sede = loc.Value;
+                    if (loc.Key > 0) sede = loc.Value;
                 }
 
-                // OBTENER NOMBRE DEL ESTADO
                 string estado = "N/A";
                 var est = estados.FirstOrDefault(e => e.Key == emp.EmployeeStatusId);
-                if (est.Key > 0)
-                    estado = est.Value;
+                if (est.Key > 0) estado = est.Value;
 
-                // Nombre del usuario que creó el registro (CreatedBy)
                 string creadoPor = "N/A";
                 if (emp.CreatedBy.HasValue && emp.CreatedBy.Value > 0)
                 {
@@ -835,22 +843,50 @@ namespace SECRON.Views
                     creadoPor = string.IsNullOrWhiteSpace(nombreUsuario) ? "SIN USUARIO" : nombreUsuario;
                 }
 
-                // AGREGAR FILA A LA TABLA
                 Tabla.Rows.Add(
-                    emp.EmployeeId,                                      // ID (oculto)
-                    emp.EmployeeCode ?? "N/A",                          // CÓDIGO
-                    emp.FullName ?? "",                                  // NOMBRE COMPLETO
-                    emp.IdentificationNumber ?? "",                      // DPI
-                    emp.InstitutionalEmail ?? "",                        // EMAIL INSTITUCIONAL
-                    emp.Phone ?? "N/A",                                  // TELÉFONO
-                    emp.HireDate.ToString("dd/MM/yyyy"),                // FECHA INGRESO
-                    departamento,                                        // DEPARTAMENTO (nombre)
-                    puesto,                                             // PUESTO (nombre)
-                    supervisor,                                         // SUPERVISOR (nombre)
-                    sede,                                               // SEDE (nombre)
-                    emp.TipoContratacion ?? "N/A",                      // TIPO CONTRATACIÓN
-                    estado,                                             // ESTADO (nombre)
-                    creadoPor                                           // CREADO POR
+                    // ===== DATOS =====
+                    emp.EmployeeId,
+                    emp.EmployeeCode ?? "N/A",
+                    emp.FullName ?? "",
+                    emp.IdentificationNumber ?? "",
+                    emp.InstitutionalEmail ?? "",
+                    emp.Phone ?? "N/A",
+                    emp.HireDate.ToString("dd/MM/yyyy"),
+                    departamento,
+                    puesto,
+                    supervisor,
+                    sede,
+                    emp.TipoContratacion ?? "N/A",
+                    estado,
+                    creadoPor,
+                    // ===== DPI =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_DPI) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== TÍTULOS =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_Titulos) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== RTU =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_RTU) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== COLEGIADO =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_Colegiado) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== RENAS =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_RENAS) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== ANT. POLICIACOS =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_AntPoliciacos) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25,
+                    // ===== ANT. PENALES =====
+                    DBNull.Value,
+                    DBNull.Value,
+                    string.IsNullOrWhiteSpace(emp.FilePath_AntPenales) ? (object)DBNull.Value : Properties.Resources.SaveVerde25x25
                 );
             }
         }
@@ -1033,49 +1069,36 @@ namespace SECRON.Views
             }
         }
         // Método para ajustar columnas
-        public void AjustarColumnas()
+        private void AjustarColumnas()
         {
-            if (Tabla.Columns.Count > 0)
+            if (Tabla.Columns.Count == 0) return;
+
+            // ===== COLUMNAS DE DATOS =====
+            Tabla.Columns["EmployeeCode"].Width = 100;
+            Tabla.Columns["FullName"].Width = 220;
+            Tabla.Columns["IdentificationNumber"].Width = 130;
+            Tabla.Columns["InstitutionalEmail"].Width = 220;
+            Tabla.Columns["Phone"].Width = 110;
+            Tabla.Columns["HireDate"].Width = 110;
+            Tabla.Columns["Department"].Width = 160;
+            Tabla.Columns["Position"].Width = 160;
+            Tabla.Columns["Supervisor"].Width = 180;
+            Tabla.Columns["Location"].Width = 130;
+            Tabla.Columns["TipoContratacion"].Width = 130;
+            Tabla.Columns["Status"].Width = 110;
+            Tabla.Columns["CreatedBy"].Width = 150;
+
+            // ===== COLUMNAS DE ARCHIVOS =====
+            string[] docs = { "DPI", "TITULOS", "RTU", "COLEGIADO", "RENAS", "ANT_POLICIACOS", "ANT_PENALES" };
+            foreach (string doc in docs)
             {
-                Tabla.Columns["EmployeeCode"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["EmployeeCode"].FillWeight = 8;
-
-                Tabla.Columns["FullName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["FullName"].FillWeight = 20;
-
-                Tabla.Columns["IdentificationNumber"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["IdentificationNumber"].FillWeight = 10;
-
-                Tabla.Columns["InstitutionalEmail"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["InstitutionalEmail"].FillWeight = 20;
-
-                Tabla.Columns["Phone"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Phone"].FillWeight = 10;
-
-                Tabla.Columns["HireDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["HireDate"].FillWeight = 10;
-
-                Tabla.Columns["Department"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Department"].FillWeight = 12;
-
-                Tabla.Columns["Position"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Position"].FillWeight = 12;
-
-                Tabla.Columns["Supervisor"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Supervisor"].FillWeight = 15;
-
-                Tabla.Columns["Location"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Location"].FillWeight = 10;
-
-                Tabla.Columns["TipoContratacion"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["TipoContratacion"].FillWeight = 10;
-
-                Tabla.Columns["Status"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["Status"].FillWeight = 10;
-
-                Tabla.Columns["CreatedBy"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                Tabla.Columns["CreatedBy"].FillWeight = 15;
+                Tabla.Columns[$"ColAbrir_{doc}"].Width = 110;
+                Tabla.Columns[$"ColCargar_{doc}"].Width = 110;
+                Tabla.Columns[$"ColEstado_{doc}"].Width = 110;
             }
+
+            foreach (DataGridViewColumn col in Tabla.Columns)
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
         }
         // Evento al cambiar selección en la tabla
         private void Tabla_SelectionChanged(object sender, EventArgs e)
@@ -1469,6 +1492,7 @@ namespace SECRON.Views
         // Evento para botón Guardar
         private void Btn_Save_Click(object sender, EventArgs e)
         {
+            if (!Btn_Save.Enabled) return;
             try
             {
                 // ASEGURAR QUE LOS VALORES ESTÉN ACTUALIZADOS ANTES DE GUARDAR
@@ -1575,6 +1599,7 @@ namespace SECRON.Views
         // Evento para botón Actualizar
         private void Btn_Update_Click(object sender, EventArgs e)
         {
+            if (!Btn_Update.Enabled) return;
             try
             {
                 if (_empleadoSeleccionado == null || _empleadoSeleccionado.EmployeeId == 0)
@@ -1683,6 +1708,7 @@ namespace SECRON.Views
         // Evento para botón Inactivar
         private void Btn_Inactive_Click(object sender, EventArgs e)
         {
+            if (!Btn_Inactive.Enabled) return;
             try
             {
                 if (_empleadoSeleccionado == null || _empleadoSeleccionado.EmployeeId == 0)
@@ -1801,6 +1827,7 @@ namespace SECRON.Views
         // Evento para botón Limpiar
         private void Btn_Clear_Click(object sender, EventArgs e)
         {
+            if (!Btn_Clear.Enabled) return;
             LimpiarFormulario();
         }
 
@@ -1809,6 +1836,7 @@ namespace SECRON.Views
         // Evento para botón Exportar a Excel
         private void Btn_Export_Click(object sender, EventArgs e)
         {
+            if (!Btn_Export.Enabled) return;
             try
             {
                 // ⭐ OBTENER REGISTROS SEGÚN FILTROS ACTIVOS
@@ -2099,5 +2127,165 @@ namespace SECRON.Views
             }
         }
         #endregion
+        #region SistemaDePermisos
+
+        private Ctrl_Security_Auth authController;
+        private HashSet<string> permisosUsuario = new HashSet<string>();
+
+        protected virtual async Task CargarPermisosUsuario(int userId, int roleId)
+        {
+            try
+            {
+                authController = new Ctrl_Security_Auth();
+                var permisos = await authController.ObtenerPermisosUsuarioAsync(userId, roleId);
+                permisosUsuario = permisos != null
+                    ? new HashSet<string>(permisos, StringComparer.OrdinalIgnoreCase)
+                    : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                permisosUsuario = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                MessageBox.Show($"ERROR AL CARGAR PERMISOS: {ex.Message}", "ERROR SECRON",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected bool TienePermiso(string permissionCode)
+        {
+            return !string.IsNullOrWhiteSpace(permissionCode) &&
+                   permisosUsuario != null &&
+                   permisosUsuario.Contains(permissionCode);
+        }
+
+        protected void AplicarEstadoBotonPorPermiso(Button boton, string permissionCode)
+        {
+            if (boton == null) return;
+            bool habilitado = TienePermiso(permissionCode);
+            boton.Enabled = habilitado;
+            if (habilitado)
+            { boton.UseVisualStyleBackColor = true; boton.ForeColor = Color.Black; boton.Cursor = Cursors.Default; }
+            else
+            { boton.BackColor = Color.FromArgb(200, 200, 200); boton.ForeColor = Color.Gray; boton.Cursor = Cursors.No; }
+        }
+
+        protected void ConfigurarControlesPorPermisos()
+        {
+            AplicarEstadoBotonPorPermiso(Btn_Save, "EMPLOYEES_MANAGMENT_CREATE");
+            AplicarEstadoBotonPorPermiso(Btn_Update, "EMPLOYEES_MANAGMENT_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Inactive, "EMPLOYEES_MANAGMENT_INACTIVE");
+            AplicarEstadoBotonPorPermiso(Btn_Export, "EMPLOYEES_MANAGMENT_EXPORT");
+            AplicarEstadoBotonPorPermiso(Btn_Search, "EMPLOYEES_MANAGMENT_READ");
+        }
+
+        #endregion SistemaDePermisos
+        #region GestionArchivosEmpleado
+        private void Tabla_CellClick_Archivos(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            int employeeId = Convert.ToInt32(Tabla.Rows[e.RowIndex].Cells["EmployeeId"].Value);
+            var emp = empleadosList.FirstOrDefault(x => x.EmployeeId == employeeId);
+            if (emp == null) return;
+
+            // Mapa: NombreColumna -> (campoDB, rutaActual, nombreArchivo)
+            var mapaAbrir = new Dictionary<string, (string campo, string ruta)>
+    {
+        { "ColAbrir_DPI",           ("FilePath_DPI",           emp.FilePath_DPI) },
+        { "ColAbrir_TITULOS",       ("FilePath_Titulos",       emp.FilePath_Titulos) },
+        { "ColAbrir_RTU",           ("FilePath_RTU",           emp.FilePath_RTU) },
+        { "ColAbrir_COLEGIADO",     ("FilePath_Colegiado",     emp.FilePath_Colegiado) },
+        { "ColAbrir_RENAS",         ("FilePath_RENAS",         emp.FilePath_RENAS) },
+        { "ColAbrir_ANT_POLICIACOS",("FilePath_AntPoliciacos", emp.FilePath_AntPoliciacos) },
+        { "ColAbrir_ANT_PENALES",   ("FilePath_AntPenales",    emp.FilePath_AntPenales) },
+    };
+
+            var mapaCargar = new Dictionary<string, (string campo, string rutaActual, string nombreArchivo)>
+    {
+        { "ColCargar_DPI",           ("FilePath_DPI",           emp.FilePath_DPI,           "DPI.pdf") },
+        { "ColCargar_TITULOS",       ("FilePath_Titulos",       emp.FilePath_Titulos,       "TITULOS.pdf") },
+        { "ColCargar_RTU",           ("FilePath_RTU",           emp.FilePath_RTU,           "RTU.pdf") },
+        { "ColCargar_COLEGIADO",     ("FilePath_Colegiado",     emp.FilePath_Colegiado,     "COLEGIADO.pdf") },
+        { "ColCargar_RENAS",         ("FilePath_RENAS",         emp.FilePath_RENAS,         "RENAS.pdf") },
+        { "ColCargar_ANT_POLICIACOS",("FilePath_AntPoliciacos", emp.FilePath_AntPoliciacos, "ANT_POLICIACOS.pdf") },
+        { "ColCargar_ANT_PENALES",   ("FilePath_AntPenales",    emp.FilePath_AntPenales,    "ANT_PENALES.pdf") },
+    };
+
+            string colName = Tabla.Columns[e.ColumnIndex].Name;
+
+            // ===== ABRIR ARCHIVO =====
+            if (mapaAbrir.ContainsKey(colName))
+            {
+                string filePath = mapaAbrir[colName].ruta;
+
+                if (string.IsNullOrWhiteSpace(filePath))
+                {
+                    MessageBox.Show("ESTE EMPLEADO NO TIENE ESTE ARCHIVO VINCULADO.", "AVISO",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    Ctrl_Employees.ActualizarFilePathEmpleado(employeeId, mapaAbrir[colName].campo, null, UserData.UserId);
+                    MessageBox.Show("EL ARCHIVO NO SE ENCUENTRA EN LA RUTA INDICADA.\nSE HA LIMPIADO EL VÍNCULO AUTOMÁTICAMENTE.",
+                        "AVISO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CargarEmpleados();
+                    return;
+                }
+
+                System.Diagnostics.Process.Start(filePath);
+                return;
+            }
+
+            // ===== CARGAR ARCHIVO =====
+            if (mapaCargar.ContainsKey(colName))
+            {
+                var (campo, rutaActual, nombreArchivo) = mapaCargar[colName];
+
+                if (!string.IsNullOrWhiteSpace(rutaActual))
+                {
+                    if (MessageBox.Show("ESTE EMPLEADO YA TIENE ESTE ARCHIVO VINCULADO.\n¿DESEA REEMPLAZARLO?",
+                        "CONFIRMAR", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                        return;
+                }
+
+                using (OpenFileDialog dlg = new OpenFileDialog())
+                {
+                    dlg.Title = "SELECCIONAR ARCHIVO PDF";
+                    dlg.Filter = "Archivos PDF (*.pdf)|*.pdf";
+
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            //string carpetaDestino = $@"\\Uregional\Shared$\SECRONDEV\RECURSOS HUMANOS\TRABAJADORES\{employeeId}\";
+                            string carpetaDestino = $@"\\Uregional\Shared$\SECRONQA\RECURSOS HUMANOS\TRABAJADORES\{employeeId}\";
+                            //string carpetaDestino = $@"\\Uregional\Shared$\SECRON\RECURSOS HUMANOS\TRABAJADORES\{employeeId}\";
+
+                            if (!System.IO.Directory.Exists(carpetaDestino))
+                                System.IO.Directory.CreateDirectory(carpetaDestino);
+
+                            string rutaDestino = System.IO.Path.Combine(carpetaDestino, nombreArchivo);
+
+                            System.IO.File.Copy(dlg.FileName, rutaDestino, overwrite: true);
+
+                            bool ok = Ctrl_Employees.ActualizarFilePathEmpleado(employeeId, campo, rutaDestino, UserData.UserId);
+                            if (ok)
+                            {
+                                MessageBox.Show("ARCHIVO VINCULADO CORRECTAMENTE.", "ÉXITO",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                CargarEmpleados();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("ERROR AL COPIAR ARCHIVO: " + ex.Message, "ERROR SECRON",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion GestionArchivosEmpleado
     }
 }

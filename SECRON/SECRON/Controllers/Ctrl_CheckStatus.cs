@@ -1,35 +1,34 @@
-﻿using System;
+﻿using SECRON.Configuration;
+using SECRON.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SECRON.Models;
-using SECRON.Configuration;
 
 namespace SECRON.Controllers
 {
     internal class Ctrl_CheckStatus
     {
         // MÉTODO PRINCIPAL: Registrar estado
-        public static int RegistrarEstado(Mdl_CheckStatus estado)
+        public static int RegistrarEstado(Mdl_CheckStatus estado, int createdBy)
         {
             try
             {
                 using (SqlConnection connection = DatabaseConfig.StartConection())
+                using (SqlCommand cmd = new SqlCommand("SP_CheckStatus_Insert", connection))
                 {
-                    string query = @"INSERT INTO CheckStatus (StatusName, Description, IsActive) 
-                        VALUES (@StatusName, @Description, @IsActive)";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@StatusName", estado.StatusName ?? "");
+                    cmd.Parameters.AddWithValue("@Description", (object)estado.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IsActive", estado.IsActive);
+                    cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
 
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@StatusName", estado.StatusName ?? "");
-                        cmd.Parameters.AddWithValue("@Description", (object)estado.Description ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IsActive", estado.IsActive);
-
-                        return cmd.ExecuteNonQuery();
-                    }
+                    object result = cmd.ExecuteScalar();
+                    return result == null ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)

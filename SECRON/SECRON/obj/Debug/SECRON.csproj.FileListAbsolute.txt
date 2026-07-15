@@ -159,7 +159,6 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Vi
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Checks_SearchBeneficiario.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Checks_SearchCuenta.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ControlCenter_MDI.resources
-C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Employees_Managment.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Home.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_CatalogLocationsCategories.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_CatalogLocationsCategories_Categories.resources
@@ -183,8 +182,6 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Vi
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Transfers_Reports.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Transfers_SearchBeneficiario.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Transfers_SearchCuenta.resources
-C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Users_Managment.resources
-C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Users_RolesPermissions.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.GenerateResource.cache
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.csproj.CoreCompileInputs.cache
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.TrustInfo.xml
@@ -235,3 +232,16 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_SearchSubCategory.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_ImportItems.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_ImportItems.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_LocationStaffAssignments.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_WarehouseInventory.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_LocationStaffAssignments_SearchUsers.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_WarehouseDispatch.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_WarehouseInventory_Ingreso.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_WarehousePermissions.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_SearchSupplier.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_SearchEmployee.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_KARDEX_SearchWarehouse.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Warehouse_Managment.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Coordinator_File.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Employee_File.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_File.resources

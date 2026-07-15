@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BCrypt.Net;
+using System.Security.Cryptography;
+
 // Agregar Referencias necesarias
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -44,6 +46,9 @@ namespace SECRON.Views
         private int totalRegistrosColaboradores = 0;
         private int totalPaginasColaboradores = 0;
 
+        // Evita que los eventos de filtro se disparen durante la carga inicial o el reseteo
+        private bool _cargandoFiltros = false;
+
         // ToolStrip para paginación - USUARIOS
         private ToolStrip toolStripPaginacionUsuarios;
         private ToolStripButton btnAnteriorUsuarios;
@@ -60,20 +65,31 @@ namespace SECRON.Views
         int nWidthEllipse, int nHeightEllipse);
 
         // Evento Load del formulario
-        private void Frm_Users_Managment_Load(object sender, EventArgs e)
+        private async void Frm_Users_Managment_Load(object sender, EventArgs e)
         {
             try
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                // Crear ToolStrip de paginación para ambas tablas
+                ConfigurarPlaceHoldersTextbox();
+                ConfigurarMaxLengthTextBox();
                 CrearToolStripPaginacionUsuarios();
                 CrearToolStripPaginacionColaboradores();
+                ConfigurarComboBoxes();
 
-                // Cargar todos los usuarios y colaboradores
+                _cargandoFiltros = true;
+                CargarFiltros();
+                _cargandoFiltros = false;
+
+                SuscribirEventosFiltros();
+
+                if (UserData != null)
+                {
+                    await CargarPermisosUsuario(UserData.UserId, UserData.RoleId);
+                    ConfigurarControlesPorPermisos();
+                }
+
                 CargarUsuarios();
-
-                // Actualizar información de paginación
                 ActualizarInfoPaginacionUsuarios();
                 ActualizarInfoPaginacionColaboradores();
 
@@ -85,22 +101,6 @@ namespace SECRON.Views
                 MessageBox.Show($"Error al cargar el formulario: {ex.Message}",
                               "Error SECRON", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // Configurar PlaceHolders en los TextBox
-            ConfigurarPlaceHoldersTextbox();
-
-            // Configurar tamaño máximo de los TextBox
-            ConfigurarMaxLengthTextBox();
-
-            // Cargar filtros
-            CargarFiltros();
-
-            // Configurar ComboBoxes
-            ConfigurarComboBoxes();
-
-            // Configurar TabIndex y Focus inicial
-            ConfigurarTabIndexYFocus();
-            AplicarEstilosBotones();
         }
 
         // Método separado para Resize
@@ -259,12 +259,27 @@ namespace SECRON.Views
         }
         #endregion ConfigurarComboBox
         #region Filtros
+        // Suscribe los eventos de cambio de los ComboBox de filtro
+        private void SuscribirEventosFiltros()
+        {
+            FiltroU2.SelectedIndexChanged += FiltroUsuarios_SelectedIndexChanged;
+            FiltroU3.SelectedIndexChanged += FiltroUsuarios_SelectedIndexChanged;
+        }
+
+        // Handler compartido: al cambiar cualquier filtro se reinicia la paginacion y se busca
+        private void FiltroUsuarios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_cargandoFiltros) return;
+
+            paginaActualUsuarios = 1;
+            Btn_SearchUsers_Click(sender, e);
+        }
         // Cargar opciones en los ComboBox de filtros
         private void CargarFiltros()
         {
             // FILTROS DE USUARIOS (Tabla1) 
 
-            // FiltroU1 - Tipo de búsqueda principal
+            // FiltroU1 - Tipo de busqueda principal
             FiltroU1.Items.AddRange(new object[]
             {
                 "TODOS",
@@ -287,13 +302,17 @@ namespace SECRON.Views
             FiltroU2.ValueMember = "Key";
             FiltroU2.SelectedIndex = 0;
 
-            // FiltroU3 - Estado bloqueado
-            FiltroU3.Items.AddRange(new object[]
+            // FiltroU3 - Estado del usuario
+            var estados = Ctrl_UserStatus.ObtenerTodosLosEstados();
+            var listaEstados = new List<KeyValuePair<int, string>>
             {
-                "TODOS",
-                "BLOQUEADOS",
-                "NO BLOQUEADOS"
-            });
+                new KeyValuePair<int, string>(0, "TODOS")
+            };
+            listaEstados.AddRange(estados);
+
+            FiltroU3.DataSource = new BindingSource(listaEstados, null);
+            FiltroU3.DisplayMember = "Value";
+            FiltroU3.ValueMember = "Key";
             FiltroU3.SelectedIndex = 0;
         }
         #endregion Filtros
@@ -305,7 +324,7 @@ namespace SECRON.Views
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                // Obtener valor de búsqueda
+                // Obtener valor de busqueda
                 string valorBusqueda = "";
                 if (Txt_ValorBuscado1.Text != "BUSCAR USUARIO POR NOMBRE, USERNAME, EMAIL..." &&
                     !string.IsNullOrWhiteSpace(Txt_ValorBuscado1.Text))
@@ -320,20 +339,19 @@ namespace SECRON.Views
                     roleId = (int)FiltroU2.SelectedValue;
                 }
 
-                // Obtener filtro 3 - Bloqueado
-                string filtroBloqueado = FiltroU3.SelectedItem?.ToString() ?? "TODOS";
-                bool? isLocked = null;
-                if (filtroBloqueado == "BLOQUEADOS")
-                    isLocked = true;
-                else if (filtroBloqueado == "NO BLOQUEADOS")
-                    isLocked = false;
+                // Obtener filtro 3 - Estado del usuario
+                int? statusId = null;
+                if (FiltroU3.SelectedValue != null && (int)FiltroU3.SelectedValue > 0)
+                {
+                    statusId = (int)FiltroU3.SelectedValue;
+                }
 
-                // Realizar búsqueda
+                // Realizar busqueda
                 List<Mdl_Users> resultados = Ctrl_Users.BuscarUsuarios(
                     textoBusqueda: valorBusqueda,
                     roleId: roleId,
-                    statusId: null,
-                    isLocked: isLocked,
+                    statusId: statusId,
+                    isLocked: null,
                     pageNumber: paginaActualUsuarios,
                     pageSize: registrosPorPaginaUsuarios
                 );
@@ -372,9 +390,11 @@ namespace SECRON.Views
             Txt_ValorBuscado1.ForeColor = Color.Gray;
 
             // Resetear filtros
+            _cargandoFiltros = true;
             FiltroU1.SelectedIndex = 0;
             FiltroU2.SelectedIndex = 0;
             FiltroU3.SelectedIndex = 0;
+            _cargandoFiltros = false;
 
             // Recargar todos los usuarios
             paginaActualUsuarios = 1;
@@ -1027,7 +1047,9 @@ namespace SECRON.Views
                 }
 
                 var confirmacion = MessageBox.Show(
-                    $"¿Desea enviar las credenciales del usuario {_usuarioSeleccionado.Username} al correo {_usuarioSeleccionado.InstitutionalEmail}?",
+                    $"Se generara una CONTRASENA TEMPORAL NUEVA para {_usuarioSeleccionado.Username} " +
+                    $"y se enviara a {_usuarioSeleccionado.InstitutionalEmail}.\n\n" +
+                    "La contrasena actual del usuario dejara de funcionar.\n\n¿Desea continuar?",
                     "Confirmar Envío de Credenciales",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
@@ -1035,6 +1057,25 @@ namespace SECRON.Views
 
                 if (confirmacion != DialogResult.Yes)
                     return;
+
+                this.Cursor = Cursors.WaitCursor;
+
+                // Generar y aplicar la contrasena temporal ANTES de enviar el correo
+                string passwordTemporal = GenerarPasswordTemporal();
+
+                int resultado = Ctrl_Users.CambiarPassword(
+                    _usuarioSeleccionado.UserId,
+                    passwordTemporal,
+                    isTemporary: true
+                );
+
+                if (resultado != 1)
+                {
+                    this.Cursor = Cursors.Default;
+                    MessageBox.Show("No se pudo restablecer la contrasena. No se envio el correo.", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 // ===== CONFIGURACIÓN DEL CORREO =====
                 string correoEmisor = "notificaciones@uregionalregion2.edu.gt";
@@ -1067,8 +1108,8 @@ namespace SECRON.Views
                                 <td style='border: 1px solid #ddd; padding: 12px;'>{_usuarioSeleccionado.Username}</td>
                             </tr>
                             <tr>
-                                <td style='border: 1px solid #ddd; padding: 12px; background-color: #f9f9f9;'><strong>Contraseña:</strong></td>
-                                <td style='border: 1px solid #ddd; padding: 12px;'>**********</td>
+                                <td style='border: 1px solid #ddd; padding: 12px; background-color: #f9f9f9;'><strong>Contraseña temporal:</strong></td>
+                                <td style='border: 1px solid #ddd; padding: 12px; font-family: Consolas, monospace; font-size: 16px;'><strong>{passwordTemporal}</strong></td>
                             </tr>
                             <tr>
                                 <td style='border: 1px solid #ddd; padding: 12px; background-color: #f9f9f9;'><strong>Estado:</strong></td>
@@ -1077,11 +1118,12 @@ namespace SECRON.Views
                         </table>
                         
                         <div style='background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;'>
-                            <p style='margin: 0;'><strong>⚠️ IMPORTANTE:</strong></p>
+                            <p style='margin: 0;'><strong>IMPORTANTE:</strong></p>
                             <ul style='margin: 10px 0;'>
+                                <li>Esta contraseña es <strong>temporal</strong> y vence en 30 días</li>
+                                <li>Cámbiela en su primer inicio de sesión</li>
                                 <li>Sus credenciales son personales e intransferibles</li>
                                 <li>NO comparta su contraseña con nadie</li>
-                                <li>Se recomienda cambiar la contraseña al primer inicio de sesión</li>
                                 <li>En caso de olvido, contacte al administrador del sistema</li>
                             </ul>
                         </div>
@@ -1100,14 +1142,43 @@ namespace SECRON.Views
                 mail.To.Add(_usuarioSeleccionado.InstitutionalEmail);
                 smtpClient.Send(mail);
 
+                this.Cursor = Cursors.Default;
+
                 MessageBox.Show("Las credenciales han sido enviadas exitosamente al correo institucional", "Éxito",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                RefrescarListadoUsuarios();
+                ConfigurarTabla1();
+                AjustarColumnasTabla1();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al enviar el correo: {ex.Message}\n\nVerifique que el correo sea válido y que tenga conexión a internet.",
-                               "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Cursor = Cursors.Default;
+                MessageBox.Show(
+                    $"La contrasena fue restablecida, pero el correo NO pudo enviarse.\n\n" +
+                    $"Detalle: {ex.Message}\n\n" +
+                    "Use el boton Restablecer Contrasena para asignar una nueva manualmente.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        // Genera una contrasena temporal aleatoria criptograficamente segura
+        private string GenerarPasswordTemporal(int longitud = 12)
+        {
+            const string caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+            var resultado = new char[longitud];
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] buffer = new byte[longitud];
+                rng.GetBytes(buffer);
+
+                for (int i = 0; i < longitud; i++)
+                {
+                    resultado[i] = caracteres[buffer[i] % caracteres.Length];
+                }
+            }
+
+            return new string(resultado);
         }
         #endregion EnviarCorreo
         #region ExportarExcel
@@ -1405,5 +1476,59 @@ namespace SECRON.Views
             }
         }
         #endregion DesbloquearUsuario
+        #region SistemaDePermisos
+
+        private Ctrl_Security_Auth authController;
+        private HashSet<string> permisosUsuario = new HashSet<string>();
+
+        protected virtual async Task CargarPermisosUsuario(int userId, int roleId)
+        {
+            try
+            {
+                authController = new Ctrl_Security_Auth();
+                var permisos = await authController.ObtenerPermisosUsuarioAsync(userId, roleId);
+                permisosUsuario = permisos != null
+                    ? new HashSet<string>(permisos, StringComparer.OrdinalIgnoreCase)
+                    : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                permisosUsuario = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                MessageBox.Show($"ERROR AL CARGAR PERMISOS: {ex.Message}", "ERROR SECRON",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected bool TienePermiso(string permissionCode)
+        {
+            return !string.IsNullOrWhiteSpace(permissionCode) &&
+                   permisosUsuario != null &&
+                   permisosUsuario.Contains(permissionCode);
+        }
+
+        protected void AplicarEstadoBotonPorPermiso(Button boton, string permissionCode)
+        {
+            if (boton == null) return;
+            bool habilitado = TienePermiso(permissionCode);
+            boton.Enabled = habilitado;
+            if (habilitado)
+            { boton.UseVisualStyleBackColor = true; boton.ForeColor = Color.Black; boton.Cursor = Cursors.Default; }
+            else
+            { boton.BackColor = Color.FromArgb(200, 200, 200); boton.ForeColor = Color.Gray; boton.Cursor = Cursors.No; }
+        }
+
+        protected void ConfigurarControlesPorPermisos()
+        {
+            AplicarEstadoBotonPorPermiso(Btn_Save, "FA_ITMS_TECH_MANAGEMENT_CREATE");
+            AplicarEstadoBotonPorPermiso(Btn_Update, "FA_ITMS_TECH_MANAGEMENT_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Send, "FA_ITMS_TECH_MANAGEMENT_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_ResetPassword, "FA_ITMS_TECH_MANAGEMENT_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_DesbloquearUsuario, "FA_ITMS_TECH_MANAGEMENT_UPDATE");
+            AplicarEstadoBotonPorPermiso(Btn_Export, "FA_ITMS_TECH_MANAGEMENT_EXPORT");
+            AplicarEstadoBotonPorPermiso(Btn_SearchUsers, "FA_ITMS_TECH_MANAGEMENT_READ");
+        }
+
+        #endregion SistemaDePermisos
+
     }
 }

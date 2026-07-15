@@ -1,40 +1,37 @@
-﻿using System;
+﻿using SECRON.Configuration;
+using SECRON.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SECRON.Models;
-using SECRON.Configuration;
 
 namespace SECRON.Controllers
 {
     internal class Ctrl_Permissions
     {
         // MÉTODO PRINCIPAL: Registrar permiso
-        public static int RegistrarPermiso(Mdl_Permissions permiso)
+        public static int RegistrarPermiso(Mdl_Permissions permiso, int createdBy)
         {
             try
             {
                 using (SqlConnection connection = DatabaseConfig.StartConection())
+                using (SqlCommand cmd = new SqlCommand("SP_Permissions_Insert", connection))
                 {
-                    string query = @"INSERT INTO Permissions (PermissionCode, PermissionName, Description, 
-                        ModuleName, ActionType, IsActive) 
-                        VALUES (@PermissionCode, @PermissionName, @Description, @ModuleName, 
-                        @ActionType, @IsActive)";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PermissionCode", permiso.PermissionCode ?? "");
+                    cmd.Parameters.AddWithValue("@PermissionName", permiso.PermissionName ?? "");
+                    cmd.Parameters.AddWithValue("@Description", (object)permiso.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ModuleName", (object)permiso.ModuleName ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ActionType", (object)permiso.ActionType ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IsActive", permiso.IsActive);
+                    cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
 
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@PermissionCode", permiso.PermissionCode ?? "");
-                        cmd.Parameters.AddWithValue("@PermissionName", permiso.PermissionName ?? "");
-                        cmd.Parameters.AddWithValue("@Description", (object)permiso.Description ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ModuleName", (object)permiso.ModuleName ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ActionType", (object)permiso.ActionType ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IsActive", permiso.IsActive);
-
-                        return cmd.ExecuteNonQuery();
-                    }
+                    object result = cmd.ExecuteScalar();
+                    return result == null ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)
@@ -143,28 +140,25 @@ namespace SECRON.Controllers
         }
 
         // MÉTODO PRINCIPAL: Actualizar permiso
-        public static int ActualizarPermiso(Mdl_Permissions permiso)
+        public static int ActualizarPermiso(Mdl_Permissions permiso, int modifiedBy)
         {
             try
             {
                 using (SqlConnection connection = DatabaseConfig.StartConection())
+                using (SqlCommand cmd = new SqlCommand("SP_Permissions_Update", connection))
                 {
-                    string query = @"UPDATE Permissions SET PermissionCode = @PermissionCode, 
-                        PermissionName = @PermissionName, Description = @Description, 
-                        ModuleName = @ModuleName, ActionType = @ActionType 
-                        WHERE PermissionId = @PermissionId";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PermissionId", permiso.PermissionId);
+                    cmd.Parameters.AddWithValue("@IsInactivation", false);
+                    cmd.Parameters.AddWithValue("@PermissionCode", permiso.PermissionCode ?? "");
+                    cmd.Parameters.AddWithValue("@PermissionName", permiso.PermissionName ?? "");
+                    cmd.Parameters.AddWithValue("@Description", (object)permiso.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ModuleName", (object)permiso.ModuleName ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ActionType", (object)permiso.ActionType ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
 
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@PermissionId", permiso.PermissionId);
-                        cmd.Parameters.AddWithValue("@PermissionCode", permiso.PermissionCode ?? "");
-                        cmd.Parameters.AddWithValue("@PermissionName", permiso.PermissionName ?? "");
-                        cmd.Parameters.AddWithValue("@Description", (object)permiso.Description ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ModuleName", (object)permiso.ModuleName ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ActionType", (object)permiso.ActionType ?? DBNull.Value);
-
-                        return cmd.ExecuteNonQuery();
-                    }
+                    object result = cmd.ExecuteScalar();
+                    return result == null ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)
@@ -175,19 +169,20 @@ namespace SECRON.Controllers
         }
 
         // MÉTODO PRINCIPAL: Inactivar permiso
-        public static int InactivarPermiso(int permissionId)
+        public static int InactivarPermiso(int permissionId, int modifiedBy)
         {
             try
             {
                 using (SqlConnection connection = DatabaseConfig.StartConection())
+                using (SqlCommand cmd = new SqlCommand("SP_Permissions_Update", connection))
                 {
-                    string query = "UPDATE Permissions SET IsActive = 0 WHERE PermissionId = @PermissionId";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PermissionId", permissionId);
+                    cmd.Parameters.AddWithValue("@IsInactivation", true);
+                    cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
 
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@PermissionId", permissionId);
-                        return cmd.ExecuteNonQuery();
-                    }
+                    object result = cmd.ExecuteScalar();
+                    return result == null ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)

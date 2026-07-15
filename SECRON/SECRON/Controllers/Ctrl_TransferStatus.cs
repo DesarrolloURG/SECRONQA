@@ -1,33 +1,32 @@
-﻿using System;
+﻿using SECRON.Configuration;
+using SECRON.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
-using SECRON.Configuration;
-using SECRON.Models;
 
 namespace SECRON.Controllers
 {
     internal class Ctrl_TransferStatus
     {
         // Registrar estado
-        public static int RegistrarEstado(Mdl_TransferStatus estado)
+        public static int RegistrarEstado(Mdl_TransferStatus estado, int createdBy)
         {
             try
             {
                 using (SqlConnection connection = DatabaseConfig.StartConection())
+                using (SqlCommand cmd = new SqlCommand("SP_TransferStatus_Insert", connection))
                 {
-                    string query = @"INSERT INTO TransferStatus (StatusName, Description, IsActive)
-                                     VALUES (@StatusName, @Description, @IsActive)";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@StatusName", estado.StatusName ?? "");
+                    cmd.Parameters.AddWithValue("@Description", (object)estado.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IsActive", estado.IsActive);
+                    cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
 
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@StatusName", estado.StatusName ?? "");
-                        cmd.Parameters.AddWithValue("@Description", (object)estado.Description ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IsActive", estado.IsActive);
-
-                        return cmd.ExecuteNonQuery();
-                    }
+                    object result = cmd.ExecuteScalar();
+                    return result == null ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)

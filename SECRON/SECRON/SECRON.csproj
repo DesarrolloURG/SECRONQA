@@ -24,7 +24,7 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://localhost:81/</InstallUrl>
-    <MinimumRequiredVersion>2.0.0.15</MinimumRequiredVersion>
+    <MinimumRequiredVersion>2.0.0.16</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
@@ -82,6 +82,14 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Otp.NET, Version=1.4.1.0, Culture=neutral, PublicKeyToken=38a48df817e173a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Otp.NET.1.4.1\lib\net461\Otp.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.8.0\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -106,6 +114,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\DatabaseConfig.cs" />
@@ -150,6 +159,7 @@
     <Compile Include="Controllers\Ctrl_LocationStaffAssignments.cs" />
     <Compile Include="Controllers\Ctrl_MeasurementUnits.cs" />
     <Compile Include="Controllers\Ctrl_MovementTypes.cs" />
+    <Compile Include="Controllers\Ctrl_Parameters.cs" />
     <Compile Include="Controllers\Ctrl_Permissions.cs" />
     <Compile Include="Controllers\Ctrl_Positions.cs" />
     <Compile Include="Controllers\Ctrl_PurchaseOrderDetails.cs" />
@@ -254,6 +264,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Cls_ActivityMessageFilter.cs" />
     <Compile Include="Views\Frm_Accounts_Managment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -608,6 +619,18 @@
     <Compile Include="Views\Frm_Security_TemporalPassword.Designer.cs">
       <DependentUpon>Frm_Security_TemporalPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Frm_Security_TwoFactorSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_Security_TwoFactorSetup.Designer.cs">
+      <DependentUpon>Frm_Security_TwoFactorSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Frm_Security_TwoFactorVerify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_Security_TwoFactorVerify.Designer.cs">
+      <DependentUpon>Frm_Security_TwoFactorVerify.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Frm_Security_UnlockUser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -846,6 +869,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Security_TemporalPassword.resx">
       <DependentUpon>Frm_Security_TemporalPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_Security_TwoFactorSetup.resx">
+      <DependentUpon>Frm_Security_TwoFactorSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_Security_TwoFactorVerify.resx">
+      <DependentUpon>Frm_Security_TwoFactorVerify.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Security_UnlockUser.resx">
       <DependentUpon>Frm_Security_UnlockUser.cs</DependentUpon>

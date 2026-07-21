@@ -260,3 +260,8 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Vi
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\Otp.NET.dll
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\QRCoder.dll
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\QRCoder.xml
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\Otp.NET.dll
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\QRCoder.dll
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\QRCoder.xml
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Security_TwoFactorSetup.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_Security_TwoFactorVerify.resources

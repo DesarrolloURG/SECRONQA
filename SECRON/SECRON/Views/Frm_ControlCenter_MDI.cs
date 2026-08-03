@@ -19,6 +19,25 @@ namespace SECRON.Views
 {
     public partial class Frm_ControlCenter_MDI : Form
     {
+        // Constructor del formulario
+        public Frm_ControlCenter_MDI()
+        {
+            // Inicializar Componentes
+            InitializeComponent();
+            // Configurar medidas iniciales del MDI
+            MedidasInicialesMDI();
+            // Configuraciones para personalizar la barra de título
+            ConfigurarBarraTitulo();
+            // Configurar el authController
+            authController = new Ctrl_Security_Auth();
+            InicializarControlInactividad();
+            // Configurar El Evento Formulario Load
+            this.Load += Frm_ControlCenter_MDI_Load;
+            // Inicializar Pestañas de Sistema
+            InicializarSistemaPestanas();
+
+        }
+
         #region PropiedadesRecibidas
         //Propiedades del formulario previo
         public string Usuario { get; set; }
@@ -93,6 +112,7 @@ namespace SECRON.Views
             // Boton Configurado
             //ConfigurarBotonImagenSinFondo(Btn_Visible);
         }
+        
         // Método para configurar un botón imagen sin fondo
         private void ConfigurarBotonImagenSinFondo(Button boton)
         {
@@ -182,6 +202,7 @@ namespace SECRON.Views
             ConfigurarBotonSubmenuNavegacion(BtnRRHH_Docencia_FichaDocente);
             ConfigurarBotonSubmenuNavegacion(BtnRRHH_Docencia_FichaCoordinador);
             ConfigurarBotonSubmenuNavegacion(BtnRRHH_Docencia_ControlAsistencias);
+            ConfigurarBotonSubmenuNavegacion(BtnRRHH_Docencia_GenerarContrato);
             // Panel de Navegación Submenú Usuarios
             ConfigurarBotonSubmenuNavegacion(BtnUsersManagment);
             ConfigurarBotonSubmenuNavegacion(BtnUsersRolesPermisos);
@@ -646,26 +667,9 @@ namespace SECRON.Views
             this.StartPosition = FormStartPosition.CenterScreen; // Centrado en pantalla
             this.WindowState = FormWindowState.Maximized; // Maximizado al iniciar
         }
-        // Constructor del formulario
-        public Frm_ControlCenter_MDI()
-        {
-            // Inicializar Componentes
-            InitializeComponent();
-            // Configurar medidas iniciales del MDI
-            MedidasInicialesMDI();
-            // Configuraciones para personalizar la barra de título
-            ConfigurarBarraTitulo();
-            // Configurar el authController
-            authController = new Ctrl_Security_Auth();
-            InicializarControlInactividad();
-            // Configurar El Evento Formulario Load
-            this.Load += Frm_ControlCenter_MDI_Load;
-            // Inicializar Pestañas de Sistema
-            InicializarSistemaPestanas();
-        }
+        
+
         #endregion PropiedadesIniciales
-
-
         #region ControlInactividadSesion
 
         // Inicializa el timer y el filtro de actividad global
@@ -678,12 +682,11 @@ namespace SECRON.Views
             Application.AddMessageFilter(activityFilter);
 
             timerInactividad = new System.Windows.Forms.Timer();
-            timerInactividad.Interval = 10000; // Revisar cada 10 segundos (ajustar a 60000 en producción)
+            timerInactividad.Interval = 10000;
             timerInactividad.Tick += TimerInactividad_Tick;
             timerInactividad.Start();
 
-            // Cargar el tiempo configurado desde ParametersConfiguration
-            CargarTiempoSesionActivaAsync();
+            // Ya no se llama CargarTiempoSesionActivaAsync() -- viene incluido en CargarDatosInicialesAsync
         }
         // Carga el parámetro TiempoSesionActivaMinutos desde la BD
         private async void CargarTiempoSesionActivaAsync()
@@ -746,7 +749,7 @@ namespace SECRON.Views
             Application.Exit();
         }
         #endregion ControlInactividadSesion
-
+        #region PanelProfile
         private async void BtnLogout_Click(object sender, EventArgs e)
         {
             DialogResult resultado = MessageBox.Show(
@@ -791,15 +794,15 @@ namespace SECRON.Views
             Application.Restart();
             Application.Exit();
         }
-
-
+        #endregion PanelProfile
         #region CargarDatosUsuario
         // Método para cargar datos del usuario
         private async void CargarDatosUsuario(string username)
         {
             try
             {
-                var userInfo = await authController.ObtenerDatosUsuarioAsync(username);
+                var (userInfo, permisos, tiempoSesion) = await authController.CargarDatosInicialesAsync(username);
+
                 if (userInfo != null)
                 {
                     // CONVERTIR TODOS LOS DATOS A MAYÚSCULAS
@@ -811,10 +814,14 @@ namespace SECRON.Views
                     // Configurar interfaz con datos del usuario
                     ConfigurarInterfazConDatosUsuario(userInfo);
 
-                    //   CARGAR PERMISOS DEL USUARIO
-                    await CargarPermisosUsuario(userInfo.UserId, userInfo.RoleId);
+                    // Asignar permisos ya cargados (sin segunda llamada)
+                    permisosUsuario = permisos;
+                    System.Diagnostics.Debug.WriteLine($"Permisos cargados: {permisosUsuario.Count}");
 
-                    //   CONFIGURAR VISIBILIDAD DE BOTONES SEGÚN PERMISOS
+                    // Aplicar tiempo de sesión ya cargado (sin tercera llamada)
+                    tiempoSesionActivaMinutos = tiempoSesion;
+
+                    // CONFIGURAR VISIBILIDAD DE BOTONES SEGÚN PERMISOS
                     ConfigurarVisibilidadBotonesPrincipales();
                     ConfigurarVisibilidadSubmenus();
                 }
@@ -1224,7 +1231,7 @@ namespace SECRON.Views
 
                 //RECURSOS HUMANOS
                 { BtnRRHH_Trabajadores, (PanelRRHH_1, new Size(300, 40)) },
-                { BtnRRHH_Docencia, (PanelRRHH_2, new Size(300, 120)) }
+                { BtnRRHH_Docencia, (PanelRRHH_2, new Size(300, 160)) }
             };
 
             if (!configuracionSubPaneles.ContainsKey(button)) return;
@@ -2481,5 +2488,17 @@ namespace SECRON.Views
 
 
         #endregion EventoFormClosing
+
+        private void BtnRRHH_Docencia_GenerarContrato_Click(object sender, EventArgs e)
+        {
+            CerrarTodosLosPaneles();
+            // Crear tu formulario específico (reemplaza con el formulario real)
+            Frm_RRHH_Coordinator_File frm = new Frm_RRHH_Coordinator_File();
+            frm.Text = "Ficha del Coordinador";
+            frm.BackColor = Color.White;
+            //Pasamos los datos del usuario
+            frm.UserData = this.UserData;
+            AbrirFormularioConPestana(frm, "Ficha del Coordinador", "CoordinatorManagment");
+        }
     }
 }

@@ -24,7 +24,7 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://localhost:81/</InstallUrl>
-    <MinimumRequiredVersion>2.0.0.19</MinimumRequiredVersion>
+    <MinimumRequiredVersion>2.0.0.20</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
@@ -163,6 +163,7 @@
     <Compile Include="Controllers\Ctrl_MovementTypes.cs" />
     <Compile Include="Controllers\Ctrl_Parameters.cs" />
     <Compile Include="Controllers\Ctrl_Permissions.cs" />
+    <Compile Include="Controllers\Ctrl_Portal_Contratos_Vigencia.cs" />
     <Compile Include="Controllers\Ctrl_Positions.cs" />
     <Compile Include="Controllers\Ctrl_PurchaseOrderDetails.cs" />
     <Compile Include="Controllers\Ctrl_PurchaseOrderMaster.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\Mdl_MovementTypes.cs" />
     <Compile Include="Models\Mdl_Municipality.cs" />
     <Compile Include="Models\Mdl_Permissions.cs" />
+    <Compile Include="Models\Mdl_Portal_Contratos_Vigencia.cs" />
     <Compile Include="Models\Mdl_Positions.cs" />
     <Compile Include="Models\Mdl_PurchaseOrderDetails.cs" />
     <Compile Include="Models\Mdl_PurchaseOrderMaster.cs" />
@@ -608,6 +610,12 @@
     <Compile Include="Views\Frm_RRHH_Teachers_TempGenerarContratos.Designer.cs">
       <DependentUpon>Frm_RRHH_Teachers_TempGenerarContratos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Frm_RRHH_Teacher_ContractPeriod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_RRHH_Teacher_ContractPeriod.Designer.cs">
+      <DependentUpon>Frm_RRHH_Teacher_ContractPeriod.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Frm_RRHH_Teacher_File.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -879,6 +887,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_RRHH_Teachers_TempGenerarContratos.resx">
       <DependentUpon>Frm_RRHH_Teachers_TempGenerarContratos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_RRHH_Teacher_ContractPeriod.resx">
+      <DependentUpon>Frm_RRHH_Teacher_ContractPeriod.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_RRHH_Teacher_File.resx">
       <DependentUpon>Frm_RRHH_Teacher_File.cs</DependentUpon>

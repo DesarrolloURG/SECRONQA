@@ -272,3 +272,4 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\bin\Debug\secron.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teachers_TempGenerarContratos.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_TempContratos.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_ContractPeriod.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_ContractPeriod.resources

@@ -24,7 +24,7 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://localhost:81/</InstallUrl>
-    <MinimumRequiredVersion>2.0.0.20</MinimumRequiredVersion>
+    <MinimumRequiredVersion>2.0.0.21</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
@@ -128,13 +128,16 @@
     <Compile Include="Controllers\Ctrl_Accounts.cs" />
     <Compile Include="Controllers\Ctrl_Audit.cs" />
     <Compile Include="Controllers\Ctrl_AudithLog_LoginResult.cs" />
+    <Compile Include="Controllers\Ctrl_AuditLogs.cs" />
     <Compile Include="Controllers\Ctrl_Banks.cs" />
     <Compile Include="Controllers\Ctrl_BanksAccountTypes.cs" />
     <Compile Include="Controllers\Ctrl_Brands.cs" />
+    <Compile Include="Controllers\Ctrl_Careers.cs" />
     <Compile Include="Controllers\Ctrl_CheckControl.cs" />
     <Compile Include="Controllers\Ctrl_Checks.cs" />
     <Compile Include="Controllers\Ctrl_CheckStatus.cs" />
     <Compile Include="Controllers\Ctrl_Coordinators.cs" />
+    <Compile Include="Controllers\Ctrl_Courses.cs" />
     <Compile Include="Controllers\Ctrl_Departments.cs" />
     <Compile Include="Controllers\Ctrl_DocentesTemporal.cs" />
     <Compile Include="Controllers\Ctrl_DocentesTemporal_Cursos.cs" />
@@ -196,14 +199,17 @@
     <Compile Include="Models\Mdl_AccountingEntryTransfers.cs" />
     <Compile Include="Models\Mdl_Accounts.cs" />
     <Compile Include="Models\Mdl_Audit.cs" />
+    <Compile Include="Models\Mdl_AuditLog.cs" />
     <Compile Include="Models\Mdl_Banks.cs" />
     <Compile Include="Models\Mdl_BanksAccountTypes.cs" />
     <Compile Include="Models\Mdl_Brands.cs" />
+    <Compile Include="Models\Mdl_Careers.cs" />
     <Compile Include="Models\Mdl_CheckControl.cs" />
     <Compile Include="Models\Mdl_Checks.cs" />
     <Compile Include="Models\Mdl_CheckStatus.cs" />
     <Compile Include="Models\Mdl_Coordinators.cs" />
     <Compile Include="Models\Mdl_Country.cs" />
+    <Compile Include="Models\Mdl_Courses.cs" />
     <Compile Include="Models\Mdl_Department.cs" />
     <Compile Include="Models\Mdl_Departments.cs" />
     <Compile Include="Models\Mdl_DocentesTemporal.cs" />
@@ -274,6 +280,30 @@
     <Compile Include="Utils\Cls_EmailConfigCache.cs" />
     <Compile Include="Utils\Cls_EmailEncryption.cs" />
     <Compile Include="Utils\Cls_EmailService.cs" />
+    <Compile Include="Views\Frm_AcademicProcesses_CareerProgram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CareerProgram.Designer.cs">
+      <DependentUpon>Frm_AcademicProcesses_CareerProgram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CareerProgram_Import.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CareerProgram_Import.Designer.cs">
+      <DependentUpon>Frm_AcademicProcesses_CareerProgram_Import.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CoursesProgram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CoursesProgram.Designer.cs">
+      <DependentUpon>Frm_AcademicProcesses_CoursesProgram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CoursesProgram_Import.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_AcademicProcesses_CoursesProgram_Import.Designer.cs">
+      <DependentUpon>Frm_AcademicProcesses_CoursesProgram_Import.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Frm_Accounts_Managment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -447,6 +477,12 @@
     </Compile>
     <Compile Include="Views\Frm_Home.Designer.cs">
       <DependentUpon>Frm_Home.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Frm_ITSM_AuditLogs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Frm_ITSM_AuditLogs.Designer.cs">
+      <DependentUpon>Frm_ITSM_AuditLogs.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Frm_ITSM_Technology.cs">
       <SubType>Form</SubType>
@@ -720,6 +756,18 @@
     <Compile Include="Views\Frm_Warehouse_Managment.Designer.cs">
       <DependentUpon>Frm_Warehouse_Managment.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\Frm_AcademicProcesses_CareerProgram.resx">
+      <DependentUpon>Frm_AcademicProcesses_CareerProgram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_AcademicProcesses_CareerProgram_Import.resx">
+      <DependentUpon>Frm_AcademicProcesses_CareerProgram_Import.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_AcademicProcesses_CoursesProgram.resx">
+      <DependentUpon>Frm_AcademicProcesses_CoursesProgram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_AcademicProcesses_CoursesProgram_Import.resx">
+      <DependentUpon>Frm_AcademicProcesses_CoursesProgram_Import.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Accounts_Managment.resx">
       <DependentUpon>Frm_Accounts_Managment.cs</DependentUpon>
     </EmbeddedResource>
@@ -806,6 +854,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_Home.resx">
       <DependentUpon>Frm_Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Frm_ITSM_AuditLogs.resx">
+      <DependentUpon>Frm_ITSM_AuditLogs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Frm_ITSM_Technology.resx">
       <DependentUpon>Frm_ITSM_Technology.cs</DependentUpon>

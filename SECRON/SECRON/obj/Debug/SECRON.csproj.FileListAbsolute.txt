@@ -273,3 +273,8 @@ C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_TempContratos.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_ContractPeriod.resources
 C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_RRHH_Teacher_ContractPeriod.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CareerProgram.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CareerProgram_Import.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram_Import.resources
+C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_AuditLogs.resources

@@ -112,7 +112,7 @@ namespace SECRON.Views
             // Boton Configurado
             //ConfigurarBotonImagenSinFondo(Btn_Visible);
         }
-        
+
         // Método para configurar un botón imagen sin fondo
         private void ConfigurarBotonImagenSinFondo(Button boton)
         {
@@ -207,6 +207,7 @@ namespace SECRON.Views
             ConfigurarBotonSubmenuNavegacion(BtnUsersManagment);
             ConfigurarBotonSubmenuNavegacion(BtnUsersRolesPermisos);
             ConfigurarBotonSubmenuNavegacion(Btn_ITSM_Technology);
+            ConfigurarBotonSubmenuNavegacion(Btn_AuditLogs);
             // Panel de Navegación Submenú Finanzas
             ConfigurarBotonSubmenuNavegacion(BtnFinances_Accounts);
             ConfigurarBotonSubmenuNavegacion(BtnFinances_Checks);
@@ -525,7 +526,7 @@ namespace SECRON.Views
             ConfigurarBordesRedondeadosPanel(PanelChecks, radioEsquinas);
             ConfigurarBordesRedondeadosPanel(PanelBanks, radioEsquinas);
             ConfigurarBordesRedondeadosPanel(PanelAccountingBooks, radioEsquinas);
-            ConfigurarBordesRedondeadosPanel(PanelLocations,    radioEsquinas);
+            ConfigurarBordesRedondeadosPanel(PanelLocations, radioEsquinas);
             ConfigurarBordesRedondeadosPanel(PanelStaticItems, radioEsquinas);
             ConfigurarBordesRedondeadosPanel(PanelWarehouses, radioEsquinas);
             ConfigurarBordesRedondeadosPanel(PanelTransfers, radioEsquinas);
@@ -667,7 +668,7 @@ namespace SECRON.Views
             this.StartPosition = FormStartPosition.CenterScreen; // Centrado en pantalla
             this.WindowState = FormWindowState.Maximized; // Maximizado al iniciar
         }
-        
+
 
         #endregion PropiedadesIniciales
         #region ControlInactividadSesion
@@ -978,6 +979,7 @@ namespace SECRON.Views
             BtnUsersManagment.Visible = TienePermiso("USERS_MANAGMENT");
             BtnUsersRolesPermisos.Visible = TienePermiso("USERS_ROLEPERMISSIONS");
             Btn_ITSM_Technology.Visible = TienePermiso("USERS_ITSM_TECHONOLOGY");
+            Btn_AuditLogs.Visible = TienePermiso("ITSM_LOGSAUDIT_TAB");
 
             // ========== FINANCES ==========
             BtnFinances_Accounts.Visible = TienePermiso("ACCOUNTS_TAB");
@@ -1168,7 +1170,7 @@ namespace SECRON.Views
             var configuracionPaneles = new Dictionary<Button, (Panel panel, Size tamaño)>
             {
                 { BtnRRHH, (PanelRRHH, new Size(300, 200)) },
-                { BtnUsers, (PanelUsers, new Size(300, 120)) },
+                { BtnUsers, (PanelUsers, new Size(300, 160)) },
                 { BtnFinances, (PanelFinances, new Size(300, 200)) },
                 { BtnOrders, (PanelOrders, new Size(300, 160)) },
                 { Btn_Inventory, (PanelInventory, new Size(300, 200)) },
@@ -1358,7 +1360,7 @@ namespace SECRON.Views
             var configuracionPaneles = new Dictionary<Button, (Panel panel, Size tamaño)>
             {
                 { BtnRRHH, (PanelRRHH, new Size(300, 280)) },
-                { BtnUsers, (PanelUsers, new Size(300, 120)) },
+                { BtnUsers, (PanelUsers, new Size(300, 160)) },
                 { BtnFinances, (PanelFinances, new Size(300, 200)) },
                 { BtnOrders, (PanelOrders, new Size(300, 160)) },
                 { Btn_Inventory, (PanelInventory, new Size(300, 200)) },
@@ -1540,7 +1542,7 @@ namespace SECRON.Views
         }
         #endregion EventosMouseEnterNavegacion
         #region EventosClickSubmenuNavegacion
-        
+
         private void BtnAccountingBooksClosing_Click(object sender, EventArgs e)
         {
             CerrarTodosLosPaneles();
@@ -1936,6 +1938,18 @@ namespace SECRON.Views
 
             AbrirFormularioConPestana(frm, "Equipos de Tecnología", "ITSM_Technology");
         }
+        private void Btn_AuditLogs_Click(object sender, EventArgs e)
+        {
+            CerrarTodosLosPaneles();
+        //TODO: Frm_ITSM_AuditLogs aún no existe, descomentar cuando se cree
+            
+            Frm_ITSM_AuditLogs frm = new Frm_ITSM_AuditLogs();
+            frm.Text = "Logs Auditoría";
+            frm.BackColor = Color.White;
+            frm.UserData = this.UserData;
+
+            AbrirFormularioConPestana(frm, "Logs Auditoría", "AuditLogs");
+        }
         private void BtnRRHH_Trabajadores_Click(object sender, EventArgs e)
         {
             ConfigurarSubPanelesVisibles(BtnRRHH_Trabajadores);
@@ -1968,11 +1982,27 @@ namespace SECRON.Views
         }
         private void BtnProcesosAcademicos_PensumCarreras_Click(object sender, EventArgs e)
         {
+            CerrarTodosLosPaneles();
+            // Crear tu formulario específico (reemplaza con el formulario real)
+            Frm_AcademicProcesses_CareerProgram frm = new Frm_AcademicProcesses_CareerProgram();
+            frm.Text = "PENSUM de Carreras";
+            frm.BackColor = Color.White;
+            //Pasamos los datos del usuario
+            frm.UserData = this.UserData;
 
+            AbrirFormularioConPestana(frm, "PENSUM de Carreras", "CareerProgram");
         }
         private void BtnProcesosAcademicos_PensumCursos_Click(object sender, EventArgs e)
         {
+            CerrarTodosLosPaneles();
+            // Crear tu formulario específico (reemplaza con el formulario real)
+            Frm_AcademicProcesses_CoursesProgram frm = new Frm_AcademicProcesses_CoursesProgram();
+            frm.Text = "PENSUM de Cursos";
+            frm.BackColor = Color.White;
+            //Pasamos los datos del usuario
+            frm.UserData = this.UserData;
 
+            AbrirFormularioConPestana(frm, "PENSUM de Carreras", "CareerProgram");
         }
         private void BtnProcesosAcademicos_TarifasCursos_Click(object sender, EventArgs e)
         {
@@ -2499,6 +2529,8 @@ namespace SECRON.Views
             //Pasamos los datos del usuario
             frm.UserData = this.UserData;
             AbrirFormularioConPestana(frm, "Ficha del Coordinador", "CoordinatorManagment");
+
+            //https://contratos.uregionalregion2.edu.gt/
         }
     }
 }

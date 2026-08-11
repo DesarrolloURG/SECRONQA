@@ -278,3 +278,8 @@ C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Vi
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram_Import.resources
 C:\Users\Jose_Torres\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_AuditLogs.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CareerProgram.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CareerProgram_Import.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_AcademicProcesses_CoursesProgram_Import.resources
+C:\Users\Administrador\Documents\GitHub\SECRONQA\SECRON\SECRON\obj\Debug\SECRON.Views.Frm_ITSM_AuditLogs.resources
